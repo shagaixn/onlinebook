@@ -60,10 +60,16 @@
                     </td>
                     <td class="px-4 py-2 font-medium text-gray-800">{{ $book->title }}</td>
                     <td class="px-4 py-2 text-gray-700">
-                        {{ optional($book->author)->name ?? '-' }}
+                        @php
+                            $authorName = $book->author ?? optional(\App\Models\Author::find($book->author_id))->name;
+                        @endphp
+                        {{ $authorName ?? '-' }}
                     </td>
                     <td class="px-4 py-2 text-gray-700">
-                        {{ $book->category ?? optional($book->categoryModel)->name ?? '-' }}
+                        @php
+                            $categoryName = $book->category ?? optional(\App\Models\BookCategory::find($book->category_id))->name;
+                        @endphp
+                        {{ $categoryName ?? '-' }}
                     </td>
                     <td class="px-4 py-2 text-gray-700">{{ number_format($book->price) }}₮</td>
                     <td class="px-4 py-2 text-gray-700">

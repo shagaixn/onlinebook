@@ -28,7 +28,7 @@
 
         <div>
             <label class="block text-gray-700 font-medium mb-1">✍️ Зохиолч</label>
-            <input type="text" name="author_name" value="{{ old('author_name', $book->author?->name) }}"
+            <input type="text" name="author" value="{{ old('author', $book->author) }}"
                    class="w-full border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-500" required>
         </div>
 

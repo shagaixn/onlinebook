@@ -15,11 +15,10 @@
              class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-200 focus:border-blue-500">
     </div>
 
-    <div>
+    <div class="form-group">
       <label class="block font-medium text-gray-700 mb-1">Зохиолчийн нэр</label>
-      <input type="text" name="author_name" value="{{ old('author_name') }}" required
+      <input type="text" name="author" value="{{ old('author') }}" required
              class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-200 focus:border-blue-500">
-      <p class="text-xs text-gray-500 mt-1">Шинэ зохиолч бол автоматаар бүртгэгдэнэ.</p>
     </div>
 
     <div>
@@ -57,6 +56,7 @@
 
     <div>
       <label class="block font-medium text-gray-700 mb-1">Зураг</label>
+      {{-- Хэрвээ хуучин зураг байгаа бол харуулах --}}
       @if(old('cover_image'))
         <div class="mb-3">
           <img src="{{ asset('storage/' . old('cover_image')) }}" class="w-32 h-32 object-cover rounded-lg shadow">

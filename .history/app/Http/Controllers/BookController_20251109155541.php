@@ -101,7 +101,6 @@ class BookController extends Controller
                 'price' => $validated['price'] ?? 0,
                 'pages' => $validated['pages'] ?? null,
                 'description' => $validated['description'] ?? null,
-                'published_date' => $validated['published_date'] ?? null, // <-- add this line
             ];
 
             // Convert category_id -> category (string) if provided

@@ -16,10 +16,15 @@
     </div>
 
     <div>
-      <label class="block font-medium text-gray-700 mb-1">Зохиолчийн нэр</label>
-      <input type="text" name="author_name" value="{{ old('author_name') }}" required
-             class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-200 focus:border-blue-500">
-      <p class="text-xs text-gray-500 mt-1">Шинэ зохиолч бол автоматаар бүртгэгдэнэ.</p>
+      <label class="block font-medium text-gray-700 mb-1">Зохиолч</label>
+      <select name="author_id" required class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-200 focus:border-blue-500">
+        <option value="">-- Сонгох --</option>
+        @foreach($authors as $author)
+          <option value="{{ $author->id }}" {{ old('author_id') == $author->id ? 'selected' : '' }}>
+            {{ $author->name }}
+          </option>
+        @endforeach
+      </select>
     </div>
 
     <div>

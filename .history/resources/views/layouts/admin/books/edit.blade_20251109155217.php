@@ -28,8 +28,15 @@
 
         <div>
             <label class="block text-gray-700 font-medium mb-1">✍️ Зохиолч</label>
-            <input type="text" name="author_name" value="{{ old('author_name', $book->author?->name) }}"
-                   class="w-full border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-500" required>
+            <select name="author_id" required
+                class="w-full border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-500">
+                <option value="">-- Сонгох --</option>
+                @foreach($authors as $author)
+                    <option value="{{ $author->id }}" {{ old('author_id', $book->author_id) == $author->id ? 'selected' : '' }}>
+                        {{ $author->name }}
+                    </option>
+                @endforeach
+            </select>
         </div>
 
         <div class="grid grid-cols-2 gap-4">

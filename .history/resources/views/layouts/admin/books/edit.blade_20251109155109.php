@@ -101,7 +101,6 @@ class BookController extends Controller
                 'price' => $validated['price'] ?? 0,
                 'pages' => $validated['pages'] ?? null,
                 'description' => $validated['description'] ?? null,
-                'published_date' => $validated['published_date'] ?? null, // <-- add this line
             ];
 
             // Convert category_id -> category (string) if provided
@@ -148,7 +147,7 @@ class BookController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'author_name' => 'required|string|max:255',
+            'author_id' => 'required|exists:authors,id',
             'category_id' => 'nullable|exists:book_categories,id',
             'cover_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'published_date' => 'nullable|date',
@@ -156,15 +155,6 @@ class BookController extends Controller
             'pages' => 'nullable|integer|min:1',
             'description' => 'nullable|string',
         ]);
-
-        // Author name-аар зохиолчийг олж авах/үүсгэх
-        $authorName = trim($validated['author_name']);
-        $author = Author::firstOrCreate(
-            ['name' => $authorName],
-            ['slug' => \Illuminate\Support\Str::slug($authorName) ?: \Illuminate\Support\Str::slug($authorName . '-' . uniqid())]
-        );
-        $validated['author_id'] = $author->id;
-        unset($validated['author_name']);
 
         // category_id -> category (string) руу хөрвүүлэх
         $category = BookCategory::find($validated['category_id'] ?? null);
@@ -182,7 +172,7 @@ class BookController extends Controller
 
         $book->update($validated);
 
-        return redirect()->route(\Route::has('admin.books.index') ? 'admin.books.index' : 'books.index')
+        return redirect()->route(Route::has('admin.books.index') ? 'admin.books.index' : 'books.index')
                          ->with('success', 'Ном шинэчлэгдлээ!');
     }
 
