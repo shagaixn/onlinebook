@@ -1,0 +1,1 @@
+Route::resource('authors', \App\Http\Controllers\AuthorController::class);
