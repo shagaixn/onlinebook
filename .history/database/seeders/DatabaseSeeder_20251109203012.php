@@ -1,0 +1,27 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\User;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+
+class DatabaseSeeder extends Seeder
+{
+    use WithoutModelEvents;
+
+    /**
+     * Seed the application's database.
+     */
+    public function run(): void
+    {
+        // User::factory(10)->create();
+
+        
+
+    // 20 категори seed хийх
+    $this->call(BookCategorySeeder::class);
+    // Admin хэрэглэгч seed хийх
+    $this->call(AdminUserSeeder::class);
+    }
+}
