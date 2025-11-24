@@ -44,7 +44,8 @@
         </button>
       </div>
       <hr class="my-6 border-blue-200 dark:border-slate-700">
-      
+      <h4 class="text-xl font-bold text-blue-700 dark:text-blue-300 mb-2">Номын тухай</h4>
+      <p class="text-gray-600 dark:text-gray-300 leading-relaxed text-base">{{ $book->description }}</p>
     </div>
   </div>
 </main>

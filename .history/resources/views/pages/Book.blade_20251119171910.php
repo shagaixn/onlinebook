@@ -23,11 +23,8 @@
                 <div class="absolute inset-0 flex flex-col justify-end opacity-0 group-hover/book:opacity-100 transition duration-300 bg-gradient-to-t from-[#0f0c24]/90 via-transparent to-transparent p-4">
                     <h2 class="text-xl font-bold mb-2 text-white">{{ $book->title }}</h2>
                     <p class="text-white mb-2 line-clamp-2 text-sm">Зохиолч: {{ $book->author }}</p>
-                          <div class="flex gap-2">
-                             <a href="{{ route('books.show', $book->id) }}"
-                                 class="bg-[#5f31ff] hover:bg-[#4223b6] text-white px-4 py-1.5 rounded-lg font-semibold text-xs w-fit">Дэлгэрэнгүй</a>
-                             
-                          </div>
+                    <a href="{{ route('books.show', $book->id) }}"
+                       class="bg-[#5f31ff] hover:bg-[#4223b6] text-white px-4 py-1.5 rounded-lg font-semibold text-xs w-fit">Дэлгэрэнгүй</a>
                 </div>
             </div>
         @empty

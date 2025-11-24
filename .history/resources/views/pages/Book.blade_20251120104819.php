@@ -26,7 +26,8 @@
                           <div class="flex gap-2">
                              <a href="{{ route('books.show', $book->id) }}"
                                  class="bg-[#5f31ff] hover:bg-[#4223b6] text-white px-4 py-1.5 rounded-lg font-semibold text-xs w-fit">Дэлгэрэнгүй</a>
-                             
+                             <a href="{{ route('books.read', $book->id) }}"
+                                 class="bg-white/90 dark:bg-slate-900/60 border border-white/40 dark:border-slate-700 text-slate-700 dark:text-slate-200 px-4 py-1.5 rounded-lg font-semibold text-xs w-fit">Унших</a>
                           </div>
                 </div>
             </div>

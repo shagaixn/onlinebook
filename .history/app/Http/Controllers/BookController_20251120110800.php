@@ -17,7 +17,22 @@ class BookController extends Controller
     public function read($id)
     {
         $book = Book::with(['authorModel', 'categoryModel'])->findOrFail($id);
-        return view('books.read', compact('book'));
+
+        $bookTitle = $book->title ?? 'Ном';
+        $chapterTitle = 'Танилцуулга';
+
+        // Provide an array of pages with image URLs expected by the view
+        $pages = [];
+        if (!empty($book->cover_image)) {
+            $pages[] = ['url' => asset('storage/' . $book->cover_image)];
+        } else {
+            $pages[] = ['url' => 'https://via.placeholder.com/900x1280.png?text=No+Page'];
+        }
+
+        $prevChapterUrl = null;
+        $nextChapterUrl = null;
+
+        return view('books.read', compact('book', 'bookTitle', 'chapterTitle', 'pages', 'prevChapterUrl', 'nextChapterUrl'));
     }
     public function index(Request $request)
     {
