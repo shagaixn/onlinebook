@@ -45,12 +45,20 @@ class AuthorController extends Controller
             'slug' => ['nullable','string','max:255','alpha_dash', Rule::unique('authors','slug')],
             'avatar' => 'nullable|image|max:2048', // form uses 'avatar' — we'll save to profile_image
             'birth_date' => 'nullable|date',
+            'death_date' => 'nullable|date',
             'birth_place' => 'nullable|string|max:255',
             'bio' => 'nullable|string',
             'notable_works_text' => 'nullable|string',
+            'awards_text' => 'nullable|string',
             'nationality' => 'nullable|string|max:255',
-            'death_date' => 'nullable|date',
-            // Note: email/phone fields in form are ignored here because authors table has no columns for them.
+            'country' => 'nullable|string|max:255',
+            'position' => 'nullable|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'social_facebook' => 'nullable|url|max:255',
+            'social_twitter' => 'nullable|url|max:255',
+            'social_instagram' => 'nullable|url|max:255',
+            'social_linkedin' => 'nullable|url|max:255',
+            'social_website' => 'nullable|url|max:255',
         ]);
 
         // save uploaded avatar into profile_images & set profile_image column
@@ -65,17 +73,30 @@ class AuthorController extends Controller
             $data['slug'] = Str::slug($data['slug']);
         }
 
+        // Build social_links array
+        $socialLinks = [];
+        if (!empty($data['social_facebook'])) $socialLinks['facebook'] = $data['social_facebook'];
+        if (!empty($data['social_twitter'])) $socialLinks['twitter'] = $data['social_twitter'];
+        if (!empty($data['social_instagram'])) $socialLinks['instagram'] = $data['social_instagram'];
+        if (!empty($data['social_linkedin'])) $socialLinks['linkedin'] = $data['social_linkedin'];
+        if (!empty($data['social_website'])) $socialLinks['website'] = $data['social_website'];
+
         // map to DB columns that exist in your migration
         $saveData = [
             'name' => $data['name'],
             'slug' => $data['slug'],
             'nationality' => $data['nationality'] ?? null,
+            'country' => $data['country'] ?? null,
+            'birth_place' => $data['birth_place'] ?? null,
+            'position' => $data['position'] ?? null,
+            'email' => $data['email'] ?? null,
+            'social_links' => !empty($socialLinks) ? $socialLinks : null,
             'birth_date' => $data['birth_date'] ?? null,
             'death_date' => $data['death_date'] ?? null,
             'profile_image' => $data['profile_image'] ?? null,
             'biography' => $data['bio'] ?? null,
-            // convert notable_works_text (multiline) -> awards (string). Use newline-separated keep.
-            'awards' => $this->notableTextToAwards($data['notable_works_text'] ?? null),
+            'awards' => $this->textToLines($data['awards_text'] ?? null),
+            'notable_works' => $this->textToLines($data['notable_works_text'] ?? null),
         ];
 
         Author::create($saveData);
@@ -112,11 +133,20 @@ class AuthorController extends Controller
             'slug' => ['nullable','string','max:255','alpha_dash', Rule::unique('authors','slug')->ignore($author->id)],
             'avatar' => 'nullable|image|max:2048',
             'birth_date' => 'nullable|date',
+            'death_date' => 'nullable|date',
             'birth_place' => 'nullable|string|max:255',
             'bio' => 'nullable|string',
             'notable_works_text' => 'nullable|string',
+            'awards_text' => 'nullable|string',
             'nationality' => 'nullable|string|max:255',
-            'death_date' => 'nullable|date',
+            'country' => 'nullable|string|max:255',
+            'position' => 'nullable|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'social_facebook' => 'nullable|url|max:255',
+            'social_twitter' => 'nullable|url|max:255',
+            'social_instagram' => 'nullable|url|max:255',
+            'social_linkedin' => 'nullable|url|max:255',
+            'social_website' => 'nullable|url|max:255',
         ]);
 
         // avatar replacement -> profile_image
@@ -139,15 +169,29 @@ class AuthorController extends Controller
             $data['slug'] = Str::slug($data['slug']);
         }
 
+        // Build social_links array
+        $socialLinks = [];
+        if (!empty($data['social_facebook'])) $socialLinks['facebook'] = $data['social_facebook'];
+        if (!empty($data['social_twitter'])) $socialLinks['twitter'] = $data['social_twitter'];
+        if (!empty($data['social_instagram'])) $socialLinks['instagram'] = $data['social_instagram'];
+        if (!empty($data['social_linkedin'])) $socialLinks['linkedin'] = $data['social_linkedin'];
+        if (!empty($data['social_website'])) $socialLinks['website'] = $data['social_website'];
+
         $updateData = [
             'name' => $data['name'],
             'slug' => $data['slug'] ?? $author->slug,
             'nationality' => $data['nationality'] ?? $author->nationality,
+            'country' => $data['country'] ?? $author->country,
+            'birth_place' => $data['birth_place'] ?? $author->birth_place,
+            'position' => $data['position'] ?? $author->position,
+            'email' => $data['email'] ?? $author->email,
+            'social_links' => !empty($socialLinks) ? $socialLinks : $author->social_links,
             'birth_date' => $data['birth_date'] ?? $author->birth_date,
             'death_date' => $data['death_date'] ?? $author->death_date,
             'profile_image' => $data['profile_image'] ?? $author->profile_image,
             'biography' => $data['bio'] ?? $author->biography,
-            'awards' => $this->notableTextToAwards($data['notable_works_text'] ?? null) ?? $author->awards,
+            'awards' => $this->textToLines($data['awards_text'] ?? null) ?? $author->awards,
+            'notable_works' => $this->textToLines($data['notable_works_text'] ?? null) ?? $author->notable_works,
         ];
 
         $author->update($updateData);
@@ -169,8 +213,8 @@ class AuthorController extends Controller
         return redirect()->route('admin.authors.index')->with('success', 'Зохиолч устгагдлаа.');
     }
 
-    // Convert multiline/commas notable_works_text into a string for awards column
-    protected function notableTextToAwards($text)
+    // Convert multiline text into a newline-separated string (for awards/notable_works columns)
+    protected function textToLines($text)
     {
         if (empty($text)) {
             return null;
@@ -189,6 +233,12 @@ class AuthorController extends Controller
         }
 
         return !empty($items) ? implode("\n", $items) : null;
+    }
+
+    // Legacy alias for backward compatibility
+    protected function notableTextToAwards($text)
+    {
+        return $this->textToLines($text);
     }
 
     protected function generateUniqueSlug($name, $ignoreId = null)
