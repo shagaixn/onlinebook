@@ -164,13 +164,10 @@
                             </p>
                             
                             {{-- Бүтээл тоо --}}
-                            @php
-                                $worksCount = $author->notable_works ? count(array_filter(preg_split('/\r\n|\r|\n/', $author->notable_works))) : 0;
-                            @endphp
-                            @if($worksCount > 0)
+                            @if($author->notable_works_count > 0)
                                 <div class="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
                                     <span>📖</span>
-                                    <span>{{ $worksCount }} бүтээл</span>
+                                    <span>{{ $author->notable_works_count }} бүтээл</span>
                                 </div>
                             @endif
                         </div>

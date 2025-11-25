@@ -89,17 +89,13 @@
                 @endif
 
                 {{-- Алдартай бүтээлүүд --}}
-                @php
-                    $notableWorks = $author->notable_works ? preg_split('/\r\n|\r|\n/', $author->notable_works) : [];
-                    $notableWorks = array_filter(array_map('trim', $notableWorks));
-                @endphp
-                @if(!empty($notableWorks))
+                @if(count($author->notable_works_array) > 0)
                     <div>
                         <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
                             <span>📚</span> Алдартай бүтээлүүд
                         </h2>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            @foreach($notableWorks as $work)
+                            @foreach($author->notable_works_array as $work)
                                 <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-slate-800 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition">
                                     <span class="flex-shrink-0 w-8 h-8 rounded bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-400">
                                         📕
@@ -112,17 +108,13 @@
                 @endif
 
                 {{-- Шагнал, цол --}}
-                @php
-                    $awards = $author->awards ? preg_split('/\r\n|\r|\n/', $author->awards) : [];
-                    $awards = array_filter(array_map('trim', $awards));
-                @endphp
-                @if(!empty($awards))
+                @if(count($author->awards_array) > 0)
                     <div>
                         <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
                             <span>🏆</span> Шагнал, цол
                         </h2>
                         <div class="space-y-2">
-                            @foreach($awards as $award)
+                            @foreach($author->awards_array as $award)
                                 <div class="flex items-start gap-3 p-3 bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-900/20 dark:to-yellow-900/20 rounded-lg border border-amber-100 dark:border-amber-800/30">
                                     <span class="flex-shrink-0 text-amber-500">🥇</span>
                                     <span class="text-gray-800 dark:text-gray-200">{{ $award }}</span>
@@ -208,11 +200,11 @@
                     </h3>
                     <div class="grid grid-cols-2 gap-4">
                         <div class="text-center p-3 bg-white dark:bg-slate-700 rounded-lg">
-                            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ count($notableWorks) }}</p>
+                            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $author->notable_works_count }}</p>
                             <p class="text-xs text-gray-500 dark:text-gray-400">Бүтээл</p>
                         </div>
                         <div class="text-center p-3 bg-white dark:bg-slate-700 rounded-lg">
-                            <p class="text-2xl font-bold text-amber-600 dark:text-amber-400">{{ count($awards) }}</p>
+                            <p class="text-2xl font-bold text-amber-600 dark:text-amber-400">{{ $author->awards_count }}</p>
                             <p class="text-xs text-gray-500 dark:text-gray-400">Шагнал</p>
                         </div>
                     </div>

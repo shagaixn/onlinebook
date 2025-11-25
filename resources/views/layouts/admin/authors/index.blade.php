@@ -71,15 +71,11 @@
 
                     {{-- Бүтээл & Шагнал тоо --}}
                     <div class="flex gap-4 text-xs text-gray-500 dark:text-gray-400 mb-4">
-                        @php
-                            $worksCount = $author->notable_works ? count(array_filter(preg_split('/\r\n|\r|\n/', $author->notable_works))) : 0;
-                            $awardsCount = $author->awards ? count(array_filter(preg_split('/\r\n|\r|\n/', $author->awards))) : 0;
-                        @endphp
-                        @if($worksCount > 0)
-                            <span class="flex items-center gap-1">📖 {{ $worksCount }} бүтээл</span>
+                        @if($author->notable_works_count > 0)
+                            <span class="flex items-center gap-1">📖 {{ $author->notable_works_count }} бүтээл</span>
                         @endif
-                        @if($awardsCount > 0)
-                            <span class="flex items-center gap-1">🏆 {{ $awardsCount }} шагнал</span>
+                        @if($author->awards_count > 0)
+                            <span class="flex items-center gap-1">🏆 {{ $author->awards_count }} шагнал</span>
                         @endif
                     </div>
 

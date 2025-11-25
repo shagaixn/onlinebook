@@ -235,12 +235,6 @@ class AuthorController extends Controller
         return !empty($items) ? implode("\n", $items) : null;
     }
 
-    // Legacy alias for backward compatibility
-    protected function notableTextToAwards($text)
-    {
-        return $this->textToLines($text);
-    }
-
     protected function generateUniqueSlug($name, $ignoreId = null)
     {
         $base = Str::slug($name ?: Str::random(8));
