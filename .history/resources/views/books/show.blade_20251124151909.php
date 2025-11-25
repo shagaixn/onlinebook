@@ -42,7 +42,24 @@
         <button aria-label="Худалдан авах" class="bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-800 dark:to-blue-600 text-white px-8 py-3 rounded-full shadow-md hover:from-blue-700 hover:to-blue-500 dark:hover:from-blue-900 dark:hover:to-blue-700 hover:scale-105 transition transform duration-200 font-semibold text-lg focus:outline-none focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-800">
           Худалдан авах
         </button>
-
+        @php
+          $inWishlist = in_array($book->id, $wishlistIds ?? []);
+        @endphp
+        <button
+          type="button"
+          class="wishlist-btn flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-lg transition
+            {{ $inWishlist ? 'bg-pink-600 text-white shadow-md' : 'bg-pink-100 dark:bg-pink-900/40 text-pink-700 dark:text-pink-300 hover:bg-pink-200 dark:hover:bg-pink-800/60' }}"
+          data-book-id="{{ $book->id }}"
+          aria-label="Wishlist-д нэмэх"
+          aria-pressed="{{ $inWishlist ? 'true' : 'false' }}">
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="{{ $inWishlist ? 'currentColor' : 'none' }}" stroke="currentColor" stroke-width="1.6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 21s-6.5-4.35-9.2-8.34A5.5 5.5 0 0112 5.52a5.5 5.5 0 019.2 7.14C18.5 16.65 12 21 12 21Z" />
+          </svg>
+          <span>{{ $inWishlist ? 'Wishlist-д байна' : 'Wishlist' }}</span>
+        </button>
+      </div>
+      <hr class="my-6 border-blue-200 dark:border-slate-700">
       
     </div>
   </div>

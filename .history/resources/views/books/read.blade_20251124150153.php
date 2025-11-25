@@ -35,7 +35,6 @@
                                 </div>
                                 <div class="slide-timeline">
                                     <div class="timeline-item {{ $i===0 ? 'active' : '' }}">Хуудас {{ $i+1 }}</div>
-                                    
                                 </div>
                             </div>
                         @endforeach
@@ -47,8 +46,19 @@
     </div>
 </section>
 
-
-
+@php
+    use Illuminate\Support\Str;
+    $coverRaw = $book->cover ?? $book->image ?? null;
+    $coverUrl = $coverRaw
+        ? (Str::startsWith($coverRaw, ['http://','https://']) ? $coverRaw : asset('storage/'.$coverRaw))
+        : null;
+@endphp
+@if($coverUrl)
+    <div class="book-cover-footer">
+        <img src="{{ $coverUrl }}" alt="{{ $book->title }} cover">
+        <div class="caption">{{ $book->title }} — Cover</div>
+    </div>
+@endif
 
 @include('include.footer')
 

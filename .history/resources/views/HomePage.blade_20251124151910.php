@@ -8,11 +8,6 @@
   }
 </style>
 
-@php
-  // Controller-оос ирээгүй бол хоосон массив болгоно
-  $wishlistIds = $wishlistIds ?? [];
-@endphp
-
 <main class="night-sky min-h-[100svh] max-w-9xl mx-auto px-4 py-15">
   <!-- Hero -->
   <section class="max-w-5xl mx-auto px-6 pt-16 pb-10 text-center" aria-labelledby="hero-heading">
@@ -217,27 +212,10 @@
   </section>
 
   @php
-    // Build marquee items from wishlist first; then fallback to new books; else static
-    $wishlistBooks = $wishlistBooks ?? null;
-
-    if (!$wishlistBooks && !empty($wishlistIds)) {
-      try {
-        // Зөвхөн title ачааллана
-        $wishlistBooks = \App\Models\Book::whereIn('id', $wishlistIds)->select('title')->get();
-      } catch (\Throwable $e) {
-        $wishlistBooks = collect();
-      }
-    }
-
-    $marqueeItems = collect($wishlistBooks ?? [])
-      ->pluck('title');
-
-    if ($marqueeItems->isEmpty()) {
-      $marqueeItems = collect($newBooks ?? [])->pluck('title');
-    }
-
-    $marqueeItems = $marqueeItems
-      ->map(fn ($t) => '📚 ' . $t)
+    // Build marquee items dynamically from new books; fallback to static labels
+    $marqueeItems = collect($newBooks ?? [])
+      ->pluck('title')
+      ->map(function ($t) { return '📚 ' . $t; })
       ->take(8)
       ->values()
       ->toArray();
@@ -251,7 +229,7 @@
   <section id="testimonials" class="mt-24">
     <div class="relative w-full overflow-hidden bg-[#132540]">
       <div class="marquee-container">
-        <div class="animate-marquee whitespace-nowrap py-6 px-2" aria-label="Wishlist дахь номуудыг гүйлгэн үзүүлж байна">
+        <div class="animate-marquee whitespace-nowrap py-6 px-2" aria-label="Шинэ номын нэрсийг гүйлгэн үзүүлж байна">
           @foreach($marqueeItems as $label)
             <span class="mx-8 text-xl sm:text-2xl text-white/90 font-semibold">{{ $label }}</span>
           @endforeach

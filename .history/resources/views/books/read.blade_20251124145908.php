@@ -28,14 +28,13 @@
                         @foreach($slides as $i => $group)
                             <div class="portfolio-slide" data-slide="{{ $i }}">
                                 <div class="slide-main">
-                                    <h2 class="text-xl font-semibold mb-4">{{ $book->title }}</h2>
+                                    <h2 class="text-xl font-semibold mb-4">{{ $book->title }} — Хэсэг {{ $i+1 }}</h2>
                                     @foreach($group as $para)
                                         <p>{!! nl2br(e($para)) !!}</p>
                                     @endforeach
                                 </div>
                                 <div class="slide-timeline">
                                     <div class="timeline-item {{ $i===0 ? 'active' : '' }}">Хуудас {{ $i+1 }}</div>
-                                    
                                 </div>
                             </div>
                         @endforeach
@@ -46,9 +45,6 @@
                 @endif
     </div>
 </section>
-
-
-
 
 @include('include.footer')
 

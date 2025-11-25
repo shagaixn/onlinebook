@@ -35,7 +35,12 @@
                                 </div>
                                 <div class="slide-timeline">
                                     <div class="timeline-item {{ $i===0 ? 'active' : '' }}">Хуудас {{ $i+1 }}</div>
-                                    
+                                 
+    <div class="book-cover-footer">
+        <img src="{{ $coverUrl }}" alt="{{ $book->title }} cover">
+        <div class="caption">{{ $book->title }} — Cover</div>
+    </div>
+
                                 </div>
                             </div>
                         @endforeach

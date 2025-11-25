@@ -35,7 +35,6 @@
                                 </div>
                                 <div class="slide-timeline">
                                     <div class="timeline-item {{ $i===0 ? 'active' : '' }}">Хуудас {{ $i+1 }}</div>
-                                    
                                 </div>
                             </div>
                         @endforeach
@@ -46,9 +45,6 @@
                 @endif
     </div>
 </section>
-
-
-
 
 @include('include.footer')
 

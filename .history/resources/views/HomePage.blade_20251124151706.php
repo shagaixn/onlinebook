@@ -8,11 +8,6 @@
   }
 </style>
 
-@php
-  // Controller-оос ирээгүй бол хоосон массив болгоно
-  $wishlistIds = $wishlistIds ?? [];
-@endphp
-
 <main class="night-sky min-h-[100svh] max-w-9xl mx-auto px-4 py-15">
   <!-- Hero -->
   <section class="max-w-5xl mx-auto px-6 pt-16 pb-10 text-center" aria-labelledby="hero-heading">
@@ -126,25 +121,11 @@
               <p class="mt-1 text-sm text-slate-300">
                 Зохиолч: {{ $book->author->name ?? '-' }}
               </p>
-              <div class="mt-3 flex items-center justify-between">
-                <div class="inline-flex items-center gap-1 text-cyan-300 text-sm">
-                  Дэлгэрэнгүй
-                  <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8">
-                    <path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </div>
-                <button
-                  type="button"
-                  class="wishlist-btn px-3 py-2 rounded-full text-sm font-medium transition
-                    {{ in_array($book->id, $wishlistIds) ? 'bg-pink-600/80 text-white' : 'bg-white/10 text-pink-300 hover:bg-white/20' }}"
-                  data-book-id="{{ $book->id }}"
-                  aria-label="Wishlist-д нэмэх"
-                  aria-pressed="{{ in_array($book->id, $wishlistIds) ? 'true' : 'false' }}">
-                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="{{ in_array($book->id, $wishlistIds) ? 'currentColor' : 'none' }}" stroke="currentColor" stroke-width="1.6">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M12 21s-6.5-4.35-9.2-8.34A5.5 5.5 0 0112 5.52a5.5 5.5 0 019.2 7.14C18.5 16.65 12 21 12 21Z" />
-                  </svg>
-                </button>
+              <div class="mt-3 inline-flex items-center gap-1 text-cyan-300 text-sm">
+                Дэлгэрэнгүй
+                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
               </div>
             </div>
           </a>
@@ -217,27 +198,10 @@
   </section>
 
   @php
-    // Build marquee items from wishlist first; then fallback to new books; else static
-    $wishlistBooks = $wishlistBooks ?? null;
-
-    if (!$wishlistBooks && !empty($wishlistIds)) {
-      try {
-        // Зөвхөн title ачааллана
-        $wishlistBooks = \App\Models\Book::whereIn('id', $wishlistIds)->select('title')->get();
-      } catch (\Throwable $e) {
-        $wishlistBooks = collect();
-      }
-    }
-
-    $marqueeItems = collect($wishlistBooks ?? [])
-      ->pluck('title');
-
-    if ($marqueeItems->isEmpty()) {
-      $marqueeItems = collect($newBooks ?? [])->pluck('title');
-    }
-
-    $marqueeItems = $marqueeItems
-      ->map(fn ($t) => '📚 ' . $t)
+    // Build marquee items dynamically from new books; fallback to static labels
+    $marqueeItems = collect($newBooks ?? [])
+      ->pluck('title')
+      ->map(function ($t) { return '📚 ' . $t; })
       ->take(8)
       ->values()
       ->toArray();
@@ -251,7 +215,7 @@
   <section id="testimonials" class="mt-24">
     <div class="relative w-full overflow-hidden bg-[#132540]">
       <div class="marquee-container">
-        <div class="animate-marquee whitespace-nowrap py-6 px-2" aria-label="Wishlist дахь номуудыг гүйлгэн үзүүлж байна">
+        <div class="animate-marquee whitespace-nowrap py-6 px-2" aria-label="Шинэ номын нэрсийг гүйлгэн үзүүлж байна">
           @foreach($marqueeItems as $label)
             <span class="mx-8 text-xl sm:text-2xl text-white/90 font-semibold">{{ $label }}</span>
           @endforeach
@@ -265,41 +229,7 @@
     </div>
   </section>
 </main>
-<script>
-  (function () {
-    const token = '{{ csrf_token() }}';
-    document.querySelectorAll('.wishlist-btn').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const id = btn.getAttribute('data-book-id');
-        btn.disabled = true;
-        try {
-          const res = await fetch("{{ route('wishlist.toggle') }}", {
-            method: 'POST',
-            headers: {
-              'X-CSRF-TOKEN': token,
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ book_id: id })
-          });
-          const data = await res.json();
-          const active = data.in_wishlist === true;
-          btn.setAttribute('aria-pressed', active ? 'true' : 'false');
-          btn.classList.toggle('bg-pink-600/80', active);
-          btn.classList.toggle('text-white', active);
-          btn.classList.toggle('bg-white/10', !active);
-          btn.classList.toggle('text-pink-300', !active);
-          const svg = btn.querySelector('svg');
-            svg.setAttribute('fill', active ? 'currentColor' : 'none');
-        } catch (e) {
-          console.error('Wishlist toggle failed', e);
-        } finally {
-          btn.disabled = false;
-        }
-      });
-    });
-  })();
-</script>
+
 @include('include.footer')
 
 <!-- Optional: Icon kit (remove if unused) -->
