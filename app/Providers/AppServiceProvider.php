@@ -20,13 +20,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $categories = Book::query()
-        ->whereNotNull('category')
-        ->where('category', '!=', '')
-        ->distinct()
-        ->orderBy('category')
-        ->pluck('category');
+        try {
+            $categories = Book::query()
+            ->whereNotNull('category')
+            ->where('category', '!=', '')
+            ->distinct()
+            ->orderBy('category')
+            ->pluck('category');
 
-    View::share('categories', $categories);
+            View::share('categories', $categories);
+        } catch (\Exception $e) {
+            // Gracefully handle missing tables during migrations or setup
+            View::share('categories', collect());
+        }
     }
 }

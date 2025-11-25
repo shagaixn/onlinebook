@@ -21,7 +21,7 @@
 }
 
 /* Media area (cover) */
-.card-3d__media { position: relative; height: 12rem; } /* ~ h-48 */
+.card-3d__media { position: relative; height: 14rem; }
 .card-3d__cover {
   display: block;
   width: 100%;
@@ -36,7 +36,7 @@
 .card-3d__shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,.45), rgba(0,0,0,0) 40%);
+  background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0) 50%);
   transform: translateZ(50px);
   pointer-events: none;
 }
@@ -70,24 +70,49 @@
 /* Below-image content slightly raised */
 .card-3d__content { position: relative; transform: translateZ(40px); }
 
+/* Country badge */
+.card-3d__badge {
+  position: absolute;
+  top: .75rem;
+  right: .75rem;
+  background: rgba(255,255,255,0.9);
+  color: #374151;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  transform: translateZ(80px);
+}
+.dark .card-3d__badge {
+  background: rgba(30,41,59,0.9);
+  color: #e2e8f0;
+}
+
 /* Accessibility */
 @media (prefers-reduced-motion: reduce) {
   .card-3d__inner, .card-3d__cover { transition: none !important; }
 }
 </style>
-<main class="night-sky min-h-[100svh] max-w-9xl mx-auto px-4 py-15">
-<div class=" max-w-7xl mx-auto px-6 py-10">
-    <h1 class="text-3xl font-bold mb-6 text-slate-90 dark:text-slate-100">Зохиолчид</h1>
 
-    <form method="GET" action="{{ route('authors.index') }}" class="mb-6 flex gap-3">
-        <input type="text" name="q" value="{{ request('q') }}" placeholder="Нэр эсвэл танилцуулга..."
-               class="flex-2 px-4 py-2 rounded-xl border border-gray-200 dark:border-slate-70 bg-black dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-        <button type="submit" class="px-5 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700">Хайх</button>
+<main class="night-sky min-h-[100svh] max-w-9xl mx-auto px-4 py-15">
+<div class="max-w-7xl mx-auto px-6 py-10">
+    <div class="text-center mb-10">
+        <h1 class="text-4xl font-bold mb-3 text-slate-900 dark:text-slate-100">📚 Зохиолчид</h1>
+        <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Алдарт зохиолчид болон тэдний бүтээлүүдтэй танилцана уу</p>
+    </div>
+
+    <form method="GET" action="{{ route('authors.index') }}" class="mb-8 flex justify-center gap-3">
+        <input type="text" name="q" value="{{ request('q') }}" placeholder="Нэр, үндэс эсвэл намтраар хайх..."
+               class="w-full max-w-md px-5 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm" />
+        <button type="submit" class="px-6 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition shadow-sm font-medium">Хайх</button>
     </form>
 
     @if($authors->count() === 0)
-        <div class="p-8 text-center text-gray-500 dark:text-gray-400 bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-800">
-            Зохиолч олдсонгүй.
+        <div class="p-12 text-center bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-800">
+            <svg class="mx-auto h-16 w-16 text-gray-400 dark:text-slate-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            <p class="text-gray-500 dark:text-gray-400 text-lg">Зохиолч олдсонгүй.</p>
         </div>
     @else
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -97,7 +122,6 @@
                     <div class="card-3d__inner bg-white dark:bg-slate-900">
                         <div class="card-3d__media">
                             @if($author->profile_image)
-                                {{-- storage/... ашиглаж APP_URL зөрчилгүй болгоно --}}
                                 <img
                                     src="{{ asset('storage/'.$author->profile_image) }}"
                                     alt="{{ $author->name }}"
@@ -105,34 +129,54 @@
                                     class="card-3d__cover"
                                     onerror="this.onerror=null;this.src='/images/authors/default.jpg';" />
                             @else
-                                <img
-                                    src="/images/authors/default.jpg"
-                                    alt="No image"
-                                    class="card-3d__cover" />
+                                <div class="card-3d__cover bg-gradient-to-br from-gray-200 to-gray-300 dark:from-slate-700 dark:to-slate-800 flex items-center justify-center">
+                                    <svg class="w-16 h-16 text-gray-400 dark:text-slate-500" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                    </svg>
+                                </div>
                             @endif
 
                             <div class="card-3d__shade"></div>
                             <div class="card-3d__shine"></div>
 
-                            <h2 class="card-3d__title text-lg">
-                                {{ $author->name }}
-                            </h2>
+                            @if($author->country)
+                                <span class="card-3d__badge">🌍 {{ $author->country }}</span>
+                            @endif
+
+                            <div class="card-3d__title">
+                                <h2 class="text-lg">{{ $author->name }}</h2>
+                                @if($author->position)
+                                    <p class="text-xs font-normal text-blue-200 mt-0.5">{{ $author->position }}</p>
+                                @endif
+                            </div>
                         </div>
 
                         <div class="card-3d__content p-4">
-                            <p class="text-sm text-gray-600 dark:text-gray-400">
-                                {{ $author->nationality ?? 'Үндэс тодорхойгүй' }}
+                            <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-2">
+                                <span>{{ $author->nationality ?? 'Үндэс тодорхойгүй' }}</span>
+                                @if($author->birth_date)
+                                    <span class="text-gray-400 dark:text-gray-500">·</span>
+                                    <span>{{ $author->birth_date->format('Y') }}@if($author->death_date)-{{ $author->death_date->format('Y') }}@endif</span>
+                                @endif
+                            </div>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 line-clamp-2 mb-3">
+                                {{ Str::limit($author->biography, 80) }}
                             </p>
-                            <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">
-                                {{ Str::limit($author->biography, 100) }}
-                            </p>
+                            
+                            {{-- Бүтээл тоо --}}
+                            @if($author->notable_works_count > 0)
+                                <div class="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                                    <span>📖</span>
+                                    <span>{{ $author->notable_works_count }} бүтээл</span>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </a>
             @endforeach
         </div>
 
-        <div class="mt-8">
+        <div class="mt-10">
             {{ $authors->links() }}
         </div>
     @endif
