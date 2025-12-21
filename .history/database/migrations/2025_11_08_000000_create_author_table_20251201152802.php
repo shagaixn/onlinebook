@@ -1,0 +1,41 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('authors', function (Blueprint $table) {
+            $table->id();
+            $table->string('name'); // Зохиолчийн нэр
+            $table->string('slug')->unique(); // URL-д ашиглах өвөрмөц нэр
+            $table->softDeletes(); // Мягмар устгах багана
+            $table->string('country')->nullable()->after('nationality'); // Улс
+            $table->string('nationality')->nullable();
+            $table->string('birth_place')->nullable(); // Үндэс, улс
+            $table->date('birth_date')->nullable(); // Төрсөн он сар өдөр
+            $table->date('death_date')->nullable(); // Нас барсан он сар өдөр
+            $table->string('profile_image')->nullable();
+            $table->text('notable_works')->nullable()->after('awards'); 
+            $table->text('biography')->nullable(); // Намтар, товч мэдээлэл
+            $table->text('social_links')->nullable()->after('email'); // Сошиал линкүүд (JSON)
+            $table->timestamps(); // created_at, updated_at
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('authors');
+          $table->dropSoftDeletes();
+          $table->dropColumn(['country', 'nationality', 'birth_place', ''social_links', 'notable_works']);
+    }
+};
