@@ -36,7 +36,7 @@ class HomeController extends Controller
     {
         // Fetch new books (latest 6 books)
         $newBooks = Book::orderBy('created_at', 'desc')
-            ->with('author')
+            ->with('authorModel')
             ->take(6)
             ->get();
 
