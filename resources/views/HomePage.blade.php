@@ -124,7 +124,7 @@
                 {{ $book->title }}
               </h3>
               <p class="mt-1 text-sm text-slate-300">
-                Зохиолч: {{ $book->author->name ?? '-' }}
+                Зохиолч: {{ $book->authorModel->name ?? '-' }}
               </p>
               <div class="mt-3 flex items-center justify-between">
                 <div class="inline-flex items-center gap-1 text-cyan-300 text-sm">
