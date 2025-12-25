@@ -26,23 +26,29 @@ class Book extends Model
         'published_date' => 'date',
     ];
 
-    // Эх сурвалж authors хүснэгттэй харилцаа (хэрвээ та өмнөх author_id-ыг хадгалсан бол ашиглагдана)
-    public function authorModel()
+    // Relationship with authors table
+    public function author()
     {
         return $this->belongsTo(\App\Models\Author::class, 'author_id');
     }
 
+    // Alias for backward compatibility
+    public function authorModel()
+    {
+        return $this->author();
+    }
+
     // Book дээрх харуулах зориулалттай нэр: эхлээд books.author (string) байвал түүнийг харуулна,
-    // үгүй бол authorModel->name (хэрвээ заагдсан бол) - ийг харуулна.
+    // үгүй бол author->name (хэрвээ заагдсан бол) - ийг харуулна.
     public function getAuthorDisplayAttribute()
     {
         // books.author (string) гэж хадгалсан нэрийг тэргүүнд харуулна
-        if (!empty($this->author)) {
-            return $this->author;
+        if (!empty($this->attributes['author'])) {
+            return $this->attributes['author'];
         }
 
         // эсвэл existing author relation-аас нэр авна
-        return $this->authorModel?->name;
+        return $this->author?->name;
     }
 
     // Хэрвээ та category_id ашиглаж байгаа бол:

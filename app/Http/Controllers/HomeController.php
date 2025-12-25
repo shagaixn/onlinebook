@@ -32,7 +32,31 @@ class HomeController extends Controller
     }
     public function home()
     {
-        return view('HomePage');
+        // Fetch latest books (limit to 6 for display)
+        $newBooks = Book::with('author')
+            ->orderByDesc('created_at')
+            ->take(6)
+            ->get();
+        
+        // Fetch latest authors (limit to 6 for display)
+        $newAuthors = Author::orderByDesc('created_at')
+            ->take(6)
+            ->get();
+        
+        // Get wishlist IDs from session or authenticated user
+        $wishlistIds = [];
+        if (auth()->check() && method_exists(auth()->user(), 'wishlistBooks')) {
+            $wishlistIds = auth()->user()->wishlistBooks()->pluck('book_id')->toArray();
+        } else {
+            $wishlistIds = session('wishlist.ids', []);
+        }
+        
+        // Get wishlist books for marquee display (if any wishlist IDs exist)
+        $wishlistBooks = !empty($wishlistIds)
+            ? Book::whereIn('id', $wishlistIds)->select('id', 'title')->get()
+            : collect();
+        
+        return view('HomePage', compact('newBooks', 'newAuthors', 'wishlistIds', 'wishlistBooks'));
     }
 
     public function service()
