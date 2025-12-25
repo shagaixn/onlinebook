@@ -1,3 +1,0 @@
-@include('include.header')
-<section></section>
-@include('include.footer')
