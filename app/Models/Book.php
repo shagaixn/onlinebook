@@ -32,6 +32,12 @@ class Book extends Model
         return $this->belongsTo(\App\Models\Author::class, 'author_id');
     }
 
+    // Alias for authorModel to support blade template usage
+    public function author()
+    {
+        return $this->belongsTo(\App\Models\Author::class, 'author_id');
+    }
+
     // Book дээрх харуулах зориулалттай нэр: эхлээд books.author (string) байвал түүнийг харуулна,
     // үгүй бол authorModel->name (хэрвээ заагдсан бол) - ийг харуулна.
     public function getAuthorDisplayAttribute()
