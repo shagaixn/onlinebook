@@ -33,7 +33,7 @@ class HomeController extends Controller
     public function home()
     {
         // Fetch latest books (limit to 6 for display)
-        $newBooks = Book::with('authorModel')
+        $newBooks = Book::with('author')
             ->orderByDesc('created_at')
             ->take(6)
             ->get();
@@ -51,13 +51,10 @@ class HomeController extends Controller
             $wishlistIds = session('wishlist.ids', []);
         }
         
-        // Get wishlist books for marquee display
-        $wishlistBooks = collect();
-        if (!empty($wishlistIds)) {
-            $wishlistBooks = Book::whereIn('id', $wishlistIds)
-                ->select('id', 'title')
-                ->get();
-        }
+        // Get wishlist books for marquee display (if any wishlist IDs exist)
+        $wishlistBooks = !empty($wishlistIds)
+            ? Book::whereIn('id', $wishlistIds)->select('id', 'title')->get()
+            : collect();
         
         return view('HomePage', compact('newBooks', 'newAuthors', 'wishlistIds', 'wishlistBooks'));
     }
