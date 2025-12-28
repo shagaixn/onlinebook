@@ -162,7 +162,7 @@
         <div class="space-y-6 md:col-span-2">
           {{-- Date block --}}
           @if($author->birth_date || $author->death_date)
-            <div class="flex items-center gap-4 p-4 bg-dark dark:bg-white/10 border border-gray-200 dark:border-white/10 rounded-xl mb-3">
+            <div class="flex items-center gap-4 p-4 bg dark:bg-white/10 border border-gray-200 dark:border-white/10 rounded-xl mb-3">
               <span class="text-2xl inline-block bg-dark dark:bg-white/10 text-slate-900 dark:text-white w-12 h-12 rounded-full flex items-center justify-center border border-gray-200 dark:border-white/20">📅</span>
               <div>
                 <span class="text-slate-500 dark:text-slate-300 text-sm">Амьдралын он</span>
@@ -193,7 +193,7 @@
               </h2>
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3">
                 @foreach($notableWorks as $work)
-                  <div class="flex items-center gap-3 p-3 bg-dark dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition">
+                  <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition">
                     <span class="inline-block bg-blue-100 dark:bg-blue-500/20 w-8 h-8 flex items-center justify-center rounded text-blue-600 dark:text-blue-200 font-bold">📙</span>
                     <span class="text-slate-700 dark:text-slate-100">{{ $work }}</span>
                   </div>
@@ -209,7 +209,7 @@
               </h2>
               <div class="space-y-2">
                 @foreach($awards as $award)
-                  <div class="flex items-center gap-3 p-3 bg-dark dark:bg-amber-400/10 rounded border border-amber-200 dark:border-amber-200/30">
+                  <div class="flex items-center gap-3 p-3 bg-amber-50 dark:bg-amber-400/10 rounded border border-amber-200 dark:border-amber-200/30">
                     <span class="text-amber-500 dark:text-amber-300">🥇</span>
                     <span class="text-slate-700 dark:text-slate-100">{{ $award }}</span>
                   </div>
@@ -220,16 +220,63 @@
         </div>
         {{-- Sidebar --}}
         <div class="flex flex-col space-y-6">
-          <div class="bg-dark dark:bg-white/5 border border-gray-200 dark:border-dark/10 rounded-xl p-5">
+          {{-- Contact --}}
+          @if($author->email || !empty($socialLinks))
+            <div class="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-5">
+              <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+                <span>📧</span> Холбоо барих
+              </h3>
+              <div class="space-y-3">
+                @if($author->email)
+                  <a href="mailto:{{ $author->email }}" class="flex items-center gap-2 text-slate-600 dark:text-slate-200 hover:text-blue-600 dark:hover:text-cyan-300 transition">
+                    <span class="bg-white dark:bg-white/10 w-8 h-8 rounded-lg flex items-center justify-center border border-gray-200 dark:border-white/20">✉️</span>
+                    <span class="text-sm truncate">{{ $author->email }}</span>
+                  </a>
+                @endif
+                @if(!empty($socialLinks['website']))
+                  <a href="{{ $socialLinks['website'] }}" target="_blank" rel="noopener" class="flex items-center gap-2 text-slate-600 dark:text-slate-200 hover:text-blue-600 dark:hover:text-cyan-300 transition">
+                    <span class="bg-white dark:bg-white/10 w-8 h-8 rounded-lg flex items-center justify-center border border-gray-200 dark:border-white/20">🌐</span>
+                    <span class="text-sm">Вэбсайт</span>
+                  </a>
+                @endif
+                @if(!empty($socialLinks['facebook']))
+                  <a href="{{ $socialLinks['facebook'] }}" target="_blank" rel="noopener" class="flex items-center gap-2 text-slate-600 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 transition">
+                    <span class="bg-blue-600 w-8 h-8 rounded-lg flex items-center justify-center text-white"><i class="fab fa-facebook-f"></i></span>
+                    <span class="text-sm">Facebook</span>
+                  </a>
+                @endif
+                @if(!empty($socialLinks['twitter']))
+                  <a href="{{ $socialLinks['twitter'] }}" target="_blank" rel="noopener" class="flex items-center gap-2 text-slate-600 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 transition">
+                    <span class="bg-black w-8 h-8 rounded-lg flex items-center justify-center text-white"><i class="fab fa-x-twitter"></i></span>
+                    <span class="text-sm">Twitter / X</span>
+                  </a>
+                @endif
+                @if(!empty($socialLinks['instagram']))
+                  <a href="{{ $socialLinks['instagram'] }}" target="_blank" rel="noopener" class="flex items-center gap-2 text-slate-600 dark:text-slate-200 hover:text-pink-600 dark:hover:text-pink-400 transition">
+                    <span class="bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 w-8 h-8 rounded-lg flex items-center justify-center text-white"><i class="fab fa-instagram"></i></span>
+                    <span class="text-sm">Instagram</span>
+                  </a>
+                @endif
+                @if(!empty($socialLinks['linkedin']))
+                  <a href="{{ $socialLinks['linkedin'] }}" target="_blank" rel="noopener" class="flex items-center gap-2 text-slate-600 dark:text-slate-200 hover:text-blue-700 dark:hover:text-blue-400 transition">
+                    <span class="bg-blue-700 w-8 h-8 rounded-lg flex items-center justify-center text-white"><i class="fab fa-linkedin-in"></i></span>
+                    <span class="text-sm">LinkedIn</span>
+                  </a>
+                @endif
+              </div>
+            </div>
+          @endif
+          {{-- Stat --}}
+          <div class="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-5">
             <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
               <span>📊</span> Статистик
             </h3>
             <div class="grid grid-cols-2 gap-4">
-              <div class="text-center p-3 bg-dark dark:bg-white/10 rounded-lg border border-gray-200 dark:border-white/10">
+              <div class="text-center p-3 bg-white dark:bg-white/10 rounded-lg border border-gray-200 dark:border-white/10">
                  <p class="text-2xl font-bold text-blue-600 dark:text-cyan-300">{{ $author->notable_works_count }}</p>
                 <p class="text-xs text-slate-500 dark:text-slate-300">Бүтээл</p>
               </div>
-              <div class="text-center p-3 bg-dark dark:bg-white/10 rounded-lg border border-gray-200 dark:border-white/10">
+              <div class="text-center p-3 bg-white dark:bg-white/10 rounded-lg border border-gray-200 dark:border-white/10">
                  <p class="text-2xl font-bold text-amber-500 dark:text-amber-300">{{ $author->awards_count }}</p>
                 <p class="text-xs text-slate-500 dark:text-slate-300">Шагнал</p>
               </div>

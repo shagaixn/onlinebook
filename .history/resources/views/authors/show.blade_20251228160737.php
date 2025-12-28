@@ -209,7 +209,7 @@
               </h2>
               <div class="space-y-2">
                 @foreach($awards as $award)
-                  <div class="flex items-center gap-3 p-3 bg-dark dark:bg-amber-400/10 rounded border border-amber-200 dark:border-amber-200/30">
+                  <div class="flex items-center gap-3 p-3 bg-amber-50 dark:bg-amber-400/10 rounded border border-amber-200 dark:border-amber-200/30">
                     <span class="text-amber-500 dark:text-amber-300">🥇</span>
                     <span class="text-slate-700 dark:text-slate-100">{{ $award }}</span>
                   </div>

@@ -20,7 +20,7 @@
       </p>
       
       <div class="flex gap-4">
-        <a href="https://www.facebook.com/" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 hover:bg-blue-600 hover:text-white flex items-center justify-center transition-all duration-300" aria-label="Facebook">
+        <a href="https://www.facebook.com/" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-dark/5 text-slate-500 dark:text-slate-400 hover:bg-blue-600 hover:text-white flex items-center justify-center transition-all duration-300" aria-label="Facebook">
           <i class="fab fa-facebook-f"></i>
         </a>
         <a href="https://www.instagram.com/portgas_d_shagai/" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 hover:bg-pink-600 hover:text-white flex items-center justify-center transition-all duration-300" aria-label="Instagram">

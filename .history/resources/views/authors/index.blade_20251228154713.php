@@ -1,9 +1,6 @@
 @include('include.header')
 
 <style>
-/* Theme-aware variables */
-:root { --card-bg: #ffffff; }
-.dark { --card-bg: #0b0b0c; }
  
 /* 3D Card Hover Effect */
 .card-3d { perspective: 1000px; }
@@ -13,7 +10,7 @@
   transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
   border-radius: 1rem;
   overflow: hidden;
-  background: var(--card-bg);
+  background: var(--card-bg, #0b0b0c);
   transition: transform 120ms ease-out, box-shadow 200ms ease, filter 200ms ease;
   will-change: transform;
 }
@@ -100,10 +97,14 @@
         <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Алдарт зохиолчид болон тэдний бүтээлүүдтэй танилцана уу</p>
     </div>
 
-   <form method="GET" action="{{ route('authors.index') }}" class="mb-8 flex justify-center gap-3">
-        <input type="text" name="q" value="{{ request('q') }}" placeholder="Нэр, үндэс эсвэл намтраар хайх..."
-              class="w-full max-w-md px-5 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm" />
-        <button type="submit" class="px-6 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition shadow-sm font-medium">Хайх</button>
+     <form method="GET" action="{{ route('authors.index') }}" class="mb-8 flex justify-center gap-3">
+      <input type="text" name="q" value="{{ request('q') }}" placeholder="Нэр, үндэс эсвэл намтраар хайх..."
+          class="w-full max-w-md px-5 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm" />
+      <button type="submit" class="px-6 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition shadow-sm font-medium">Хайх</button>
+      <button type="button" id="theme-toggle" aria-label="Theme toggle" aria-pressed="false"
+          class="px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800 text-slate-700 dark:text-slate-100 hover:bg-gray-100 dark:hover:bg-slate-700 transition shadow-sm font-medium">
+        🌙 Dark
+      </button>
     </form>
 
     @if($authors->count() === 0)
@@ -177,6 +178,42 @@
 </div>
 
 <script>
+/* Dark/Light theme toggle with persistence + system fallback */
+(() => {
+  const KEY = 'theme-preference';
+  const toggle = document.getElementById('theme-toggle');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+  const getSaved = () => localStorage.getItem(KEY);
+  const getSystem = () => (prefersDark.matches ? 'dark' : 'light');
+  const getCurrent = () => getSaved() || getSystem();
+
+  function applyTheme(theme) {
+    const isDark = theme === 'dark';
+    document.documentElement.classList.toggle('dark', isDark);
+    if (toggle) {
+      toggle.setAttribute('aria-pressed', String(isDark));
+      toggle.textContent = isDark ? '☀️ Light' : '🌙 Dark';
+    }
+  }
+
+  // Initial apply
+  applyTheme(getCurrent());
+
+  // Toggle click
+  toggle?.addEventListener('click', () => {
+    const next = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+    localStorage.setItem(KEY, next);
+    applyTheme(next);
+  });
+
+  // If user hasn't set preference, follow system changes
+  prefersDark.addEventListener('change', (e) => {
+    if (getSaved()) return;
+    applyTheme(e.matches ? 'dark' : 'light');
+  });
+})();
+
 /* Cursor-based 3D tilt + glow */
 (() => {
   const supportsHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;

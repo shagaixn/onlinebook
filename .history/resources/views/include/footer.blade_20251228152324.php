@@ -1,5 +1,5 @@
 <!-- FOOTER -->
-<footer class="site-footer relative mt-24 border-t border-gray-200 dark:border-white/10 bg-dark dark:bg-[#0f172a] text-slate-600 dark:text-slate-300 overflow-hidden">
+<footer class="site-footer relative mt-24 border-t border-gray-200 dark:border-white/10 bg-darl dark:bg-[#0f172a] text-slate-600 dark:text-slate-300 overflow-hidden">
   <!-- Background Glow -->
   <div class="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl -translate-y-1/2 pointer-events-none"></div>
   <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl translate-y-1/2 pointer-events-none"></div>

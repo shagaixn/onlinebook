@@ -10,6 +10,7 @@
     tailwind = window.tailwind || {};
     tailwind.config = { darkMode: 'class' };
   </script>
+  
 
   {{-- Inject per-page force flag (set by views before including this header) --}}
   <script>window.__FORCE_THEME_FLAG__ = @json($forceTheme ?? false);</script>
@@ -90,28 +91,62 @@
       outline: none;
       transition: border-color 0.2s, background 0.3s;
     }
-    .search-input:focus { border-color: #3b82f6; }
+    .search-input:focus {
+      border-color: #3b82f6;
+    }
     .dark .search-input {
       background: #0f172a;
-      border-color: #475569;
-      color: #f1f5f9;
+      border-color: #475569; /* slightly lighter border */
+      color: #f1f5f9; /* brighter input text */
     }
-    .dark .search-input::placeholder { color: #cbd5e1; }
+    .dark .search-input::placeholder {
+      color: #cbd5e1; /* lighter placeholder */
+    }
 
     /* --- Global Text Enforcement --- */
-    body, p, h1, h2, h3, h4, h5, h6, span, a, li, div, button, input, textarea, select { font-weight: 700 !important; }
-    body { color: #000000; }
+    
+    /* 1. All text bold by default */
+    body, p, h1, h2, h3, h4, h5, h6, span, a, li, div, button, input, textarea, select {
+      font-weight: 700 !important; /* Bold */
+    }
+
+    /* 2. Light Mode: All text black */
+    body {
+      color: #000000;
+    }
+    /* Override specific base text colors in light mode to be black */
     :not(.dark) .text-slate-50, :not(.dark) .text-slate-100, :not(.dark) .text-slate-200, :not(.dark) .text-slate-300, :not(.dark) .text-slate-400,
     :not(.dark) .text-gray-50, :not(.dark) .text-gray-100, :not(.dark) .text-gray-200, :not(.dark) .text-gray-300, :not(.dark) .text-gray-400,
-    :not(.dark) .text-white { color: #000000 !important; }
+    :not(.dark) .text-white {
+        color: #000000 !important;
+    }
 
-    .dark body { color: #ffffff; }
+    /* 3. Dark Mode: All text white */
+    .dark body {
+      color: #ffffff;
+    }
+    
+    /* Override specific base text colors in dark mode to be white.
+       We target specific classes (e.g. .text-slate-900) instead of attribute selectors [class*="text-slate-"]
+       to avoid accidentally overriding 'dark:text-slate-900' which might be intended to be dark.
+    */
     .dark .text-black,
     .dark .text-slate-950, .dark .text-slate-900, .dark .text-slate-800, .dark .text-slate-700, .dark .text-slate-600, .dark .text-slate-500,
     .dark .text-gray-950, .dark .text-gray-900, .dark .text-gray-800, .dark .text-gray-700, .dark .text-gray-600, .dark .text-gray-500,
     .dark .text-zinc-950, .dark .text-zinc-900, .dark .text-zinc-800, .dark .text-zinc-700, .dark .text-zinc-600, .dark .text-zinc-500,
     .dark .text-neutral-950, .dark .text-neutral-900, .dark .text-neutral-800, .dark .text-neutral-700, .dark .text-neutral-600, .dark .text-neutral-500,
-    .dark .text-stone-950, .dark .text-stone-900, .dark .text-stone-800, .dark .text-stone-700, .dark .text-stone-600, .dark .text-stone-500 { color: #ffffff !important; }
+    .dark .text-stone-950, .dark .text-stone-900, .dark .text-stone-800, .dark .text-stone-700, .dark .text-stone-600, .dark .text-stone-500 {
+        color: #ffffff !important;
+    }
+    
+    /* Keep primary brand colors (like blue) if desired, or force them to white too? 
+       The user said "all text white". I will assume they mean content text, but let's stick to the request.
+       If I force EVERYTHING to white, links might lose their distinction. 
+       However, "text-uud bugd tsagaan" usually implies reading content. 
+       I will leave text-blue-* alone for now as they are usually interactive elements, 
+       unless the user complains. But the previous request was about "text color changing".
+    */
+
   </style>
 </head>
 
@@ -119,7 +154,7 @@
 
   <!-- Header -->
   <header class="sticky top-0 z-50 border-b border-gray-100 dark:border-slate-800 px-0 pt-4 pb-2 bg-white dark:bg-slate-900">
-    <div class="max-w-screen-2xl mx-auto flex items-center justify-between px-8">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-8">
       <!-- Logo -->
       <a href="/" class="flex items-center gap-2">
         <span class="text-2xl font-bold text-blue-600">Book</span>
@@ -141,8 +176,9 @@
         </button>
       </form>
 
+      
       <!-- Right side -->
-      <div class="flex items-center gap-4">
+     <div class="flex items-center gap-4">
         <!-- 🌗 Theme toggle -->
         <button id="theme-toggle" aria-label="Theme солих" class="text-xl">
           <i class="fa-regular fa-moon dark:hidden"></i>
@@ -166,7 +202,7 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="max-w-screen-2xl mx-auto px-8 mt-4 flex items-center gap-8 text-gray-700 dark:text-gray-300 font-medium">
+    <nav class="max-w-7xl mx-auto px-8 mt-4 flex items-center gap-8 text-gray-700 dark:text-gray-300 font-medium">
       <a href="{{ route('home') }}" class="nav-link px-2 py-1 rounded-full hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-slate-800 dark:hover:text-blue-400 text-blue-600 dark:text-blue-400 font-semibold">Танд зориулав</a>
       <a href="{{ route('book') }}" class="nav-link px-2 py-1 rounded-full hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-slate-800 dark:hover:text-blue-400">Ном</a>
       <a href="{{ route('subscription') }}" class="nav-link px-2 py-1 rounded-full hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-slate-800 dark:hover:text-blue-400">Subscription</a>
@@ -181,6 +217,7 @@
     (function () {
       const toggle = document.getElementById('theme-toggle');
       if (!toggle) return;
+      
       const root = document.documentElement;
 
       function setCookie(name, value, days) {
@@ -202,14 +239,33 @@
         }
       }
 
+      // Ensure initial state matches localStorage/cookie if they exist
+      // This runs after DOMContentLoaded to fix any mismatch from server-side render
       const savedTheme = localStorage.getItem('theme') || (document.cookie.match('(^|;)\\s*theme\\s*=\\s*([^;]+)') ? decodeURIComponent(document.cookie.match('(^|;)\\s*theme\\s*=\\s*([^;]+)')[2]) : null);
-      if (savedTheme) { setTheme(savedTheme); }
+      if (savedTheme) {
+        setTheme(savedTheme);
+      }
 
       toggle.addEventListener('click', (e) => {
         e.preventDefault();
         const isDark = root.classList.contains('dark');
         setTheme(isDark ? 'light' : 'dark');
       });
+    })();
+
+    // Гүйлгэхэд header-д зөөлөн сүүдэр нэмэх (UX)
+    (function () {
+      const headerEl = document.querySelector('header');
+      if (!headerEl) return;
+      function onScroll() {
+        if (window.scrollY > 0) {
+          headerEl.classList.add('shadow-sm');
+        } else {
+          headerEl.classList.remove('shadow-sm');
+        }
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
     })();
   </script>
 </body>

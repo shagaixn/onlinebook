@@ -1,9 +1,6 @@
 @include('include.header')
 
 <style>
-/* Theme-aware variables */
-:root { --card-bg: #ffffff; }
-.dark { --card-bg: #0b0b0c; }
  
 /* 3D Card Hover Effect */
 .card-3d { perspective: 1000px; }
@@ -13,7 +10,7 @@
   transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
   border-radius: 1rem;
   overflow: hidden;
-  background: var(--card-bg);
+  background: var(--card-bg, #0b0b0c);
   transition: transform 120ms ease-out, box-shadow 200ms ease, filter 200ms ease;
   will-change: transform;
 }

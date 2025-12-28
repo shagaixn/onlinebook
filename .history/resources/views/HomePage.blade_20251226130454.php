@@ -124,9 +124,9 @@
     
 
   {{-- ================= WISHLIST BOOKS ================= --}}
-  {{-- @if(isset($wishlistBooks) && $wishlistBooks->count() > 0)
-    <section class="m-w-6xl mx-auto px-6 mt-24">
-      <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+  @if(isset($wishlistBooks) && $wishlistBooks->count() > 0)
+    <section class="max-w-6xl mx-auto px-6 mt-24">
+      <h2 class="text-2xl font-bold text-slate-90 dark:text-white mb-6 flex items-center gap-2">
         <span aria-hidden="true">❤️</span> Таны хадгалсан номууд
       </h2>
 
@@ -148,7 +148,7 @@
         @endforeach
       </div>
     </section>
-  @endif --}}
+  @endif
 
   {{-- ================= TOP RATED ================= --}}
   <section class="max-w-6xl mx-auto px-6 mt-24">
