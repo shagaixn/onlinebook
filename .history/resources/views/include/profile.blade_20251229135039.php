@@ -105,13 +105,13 @@
                 <!-- Right Column: Details & Activity -->
                 <div class="lg:col-span-2 space-y-6">
                     <!-- Personal Info -->
-                    <div class="bg-dark dark:bg-slate-800/50 backdrop-blur-xl border border-gray-200 dark:border-slate-700 rounded-2xl p-6">
+                    <div class="bg-white dark:bg-slate-800/50 backdrop-blur-xl border border-gray-200 dark:border-slate-700 rounded-2xl p-6">
                         <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2 border-b border-gray-200 dark:border-slate-700 pb-4">
                             <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                             Хувийн мэдээлэл
                         </h3>
 
-                        <div class="grid bg-dark grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-1">
                                 <label class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">Нэр</label>
                                 <div class="text-slate-900 dark:text-slate-200 font-medium bg-slate-50 dark:bg-slate-900/50 px-4 py-3 rounded-lg border border-gray-200 dark:border-slate-700/50">
@@ -151,7 +151,7 @@
                         </div>
                     </div>
 
-                    <!-- Recent Activity -->
+                    <!-- Recent Activity (Placeholder) -->
                     <div class="bg-white dark:bg-slate-800/50 backdrop-blur-xl border border-gray-200 dark:border-slate-700 rounded-2xl p-6">
                         <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2 border-b border-gray-200 dark:border-slate-700 pb-4">
                             <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -159,41 +159,6 @@
                         </h3>
                         
                         <div class="space-y-4">
-                            @if(isset($continueReading) && $continueReading && $continueReading->book)
-                                <!-- Last Read Book -->
-                                <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-900/30 border border-gray-200 dark:border-slate-700/50 hover:border-gray-300 dark:hover:border-slate-600 transition-colors">
-                                    <div class="w-16 h-16 rounded-lg overflow-hidden bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
-                                        @php
-                                            $cover = $continueReading->book->cover_image ? asset('storage/' . $continueReading->book->cover_image) : null;
-                                        @endphp
-                                        @if($cover)
-                                            <img src="{{ $cover }}" alt="{{ $continueReading->book->title }}" class="w-full h-full object-cover">
-                                        @else
-                                            <svg class="w-8 h-8 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m-3-3h6M5 6h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2z"></path></svg>
-                                        @endif
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-slate-900 dark:text-slate-200 font-medium truncate">Сүүлд уншсан: {{ $continueReading->book->title }}</p>
-                                        <p class="text-slate-600 dark:text-slate-400 text-xs truncate">Зохиолч: {{ $continueReading->book->author_display ?? $continueReading->book->author }}</p>
-                                        <p class="text-slate-600 dark:text-slate-400 text-xs">Хуудас: {{ $continueReading->current_page }} @if($continueReading->percentage) • {{ round($continueReading->percentage) }}% @endif</p>
-                                    </div>
-                                    <div class="shrink-0">
-                                        <a href="{{ route('books.read', $continueReading->book_id) }}" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-medium transition-colors">
-                                            Үргэлжлүүлэн унших
-                                        </a>
-                                    </div>
-                                </div>
-                            @else
-                                <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-900/30 border border-gray-200 dark:border-slate-700/50">
-                                    <div class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-500">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    </div>
-                                    <div>
-                                        <p class="text-slate-900 dark:text-slate-200 text-sm">Сүүлд уншсан номын мэдээлэл алга байна</p>
-                                        <p class="text-slate-600 dark:text-slate-500 text-xs">Ном уншаад автоматаар хадгалагдана</p>
-                                    </div>
-                                </div>
-                            @endif
                             <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-900/30 border border-gray-200 dark:border-slate-700/50 hover:border-gray-300 dark:hover:border-slate-600 transition-colors">
                                 <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>

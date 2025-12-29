@@ -1,6 +1,6 @@
 @include('include.header')
 
-<div class="min-h-screen bg-dark dark:dark text-slate-900 dark:text-white pt-24 pb-12 relative overflow-hidden transition-colors">
+<div class="min-h-screen bg-dark dark:bg-[#0f172a] text-slate-900 dark:text-white pt-24 pb-12 relative overflow-hidden">
     <!-- Background Elements -->
     <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
         <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-500/20 rounded-full blur-[120px]"></div>
@@ -11,7 +11,7 @@
         <!-- Header Section -->
         <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
             <div>
-                <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
+                <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-dark  dark:from-blue-400 dark:to-purple-400">
                     Миний Профайл
                 </h1>
                 <p class="text-slate-600 dark:text-slate-400 mt-2">Таны хувийн мэдээлэл болон тохиргоо</p>
@@ -40,44 +40,44 @@
                 <!-- Left Column: Profile Card -->
                 <div class="lg:col-span-1 space-y-6">
                     <!-- User Card -->
-                    <div class="bg-dark dark:bg-slate-800/50 backdrop-blur-xl border border-gray-200 dark:border-slate-700 rounded-2xl p-6 text-center relative overflow-hidden group shadow-sm dark:shadow-none">
+                    <div class="bg-white dark:bg-slate-800/50 backdrop-blur-xl border border-gray-200 dark:border-slate-700 rounded-2xl p-6 text-center relative overflow-hidden group shadow-sm dark:shadow-none">
                         <div class="absolute inset-0 bg-gradient-to-b from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                         
                         <div class="relative inline-block mb-4">
                             <div class="w-32 h-32 rounded-full p-1 bg-gradient-to-br from-blue-500 to-purple-500">
                                 <img src="{{ Auth::user()->profile_image ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=0f172a&color=3b82f6' }}" 
                                      alt="{{ Auth::user()->name }}" 
-                                     class="w-full h-full rounded-full object-cover border-4 border-gray-200 dark:border-slate-900">
+                                     class="w-full h-full rounded-full object-cover border-4 border-slate-900">
                             </div>
                             <button class="absolute bottom-2 right-2 p-2 bg-blue-600 rounded-full hover:bg-blue-500 transition-colors shadow-lg">
                                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                             </button>
                         </div>
 
-                        <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-1">{{ Auth::user()->name }}</h2>
-                        <p class="text-blue-600 dark:text-blue-400 text-sm mb-4">{{ Auth::user()->email }}</p>
+                        <h2 class="text-xl font-bold text-white mb-1">{{ Auth::user()->name }}</h2>
+                        <p class="text-blue-400 text-sm mb-4">{{ Auth::user()->email }}</p>
                         
                         <div class="flex justify-center gap-2 mb-6">
-                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-blue-500/10 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-500/30">
+                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-blue-500/20 text-blue-300 border border-blue-500/30">
                                 {{ Auth::user()->role ?? 'Уншигч' }}
                             </span>
-                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-purple-500/10 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-500/30">
+                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-purple-500/20 text-purple-300 border border-purple-500/30">
                                 ID: #{{ Auth::user()->id }}
                             </span>
                         </div>
 
-                        <div class="grid grid-cols-3 gap-2 border-t border-gray-200 dark:border-slate-700 pt-4">
+                        <div class="grid grid-cols-3 gap-2 border-t border-slate-700 pt-4">
                             <div class="text-center">
-                                <div class="text-lg font-bold text-slate-900 dark:text-white">0</div>
-                                <div class="text-xs text-slate-500 dark:text-slate-400">Ном</div>
+                                <div class="text-lg font-bold text-white">0</div>
+                                <div class="text-xs text-slate-400">Ном</div>
                             </div>
-                            <div class="text-center border-l border-gray-200 dark:border-slate-700">
-                                <div class="text-lg font-bold text-slate-900 dark:text-white">0</div>
-                                <div class="text-xs text-slate-500 dark:text-slate-400">Сэтгэгдэл</div>
+                            <div class="text-center border-l border-slate-700">
+                                <div class="text-lg font-bold text-white">0</div>
+                                <div class="text-xs text-slate-400">Сэтгэгдэл</div>
                             </div>
-                            <div class="text-center border-l border-gray-200 dark:border-slate-700">
-                                <div class="text-lg font-bold text-slate-900 dark:text-white">0</div>
-                                <div class="text-xs text-slate-500 dark:text-slate-400">Хадгалсан</div>
+                            <div class="text-center border-l border-slate-700">
+                                <div class="text-lg font-bold text-white">0</div>
+                                <div class="text-xs text-slate-400">Хадгалсан</div>
                             </div>
                         </div>
                     </div>
@@ -105,102 +105,67 @@
                 <!-- Right Column: Details & Activity -->
                 <div class="lg:col-span-2 space-y-6">
                     <!-- Personal Info -->
-                    <div class="bg-dark dark:bg-slate-800/50 backdrop-blur-xl border border-gray-200 dark:border-slate-700 rounded-2xl p-6">
-                        <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2 border-b border-gray-200 dark:border-slate-700 pb-4">
+                    <div class="bg-slate-800/50 backdrop-blur-xl border border-slate-700 rounded-2xl p-6">
+                        <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2 border-b border-slate-700 pb-4">
                             <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                             Хувийн мэдээлэл
                         </h3>
 
-                        <div class="grid bg-dark grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-1">
-                                <label class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">Нэр</label>
-                                <div class="text-slate-900 dark:text-slate-200 font-medium bg-slate-50 dark:bg-slate-900/50 px-4 py-3 rounded-lg border border-gray-200 dark:border-slate-700/50">
+                                <label class="text-xs uppercase tracking-wider text-slate-500 font-semibold">Нэр</label>
+                                <div class="text-slate-200 font-medium bg-slate-900/50 px-4 py-3 rounded-lg border border-slate-700/50">
                                     {{ Auth::user()->name }}
                                 </div>
                             </div>
                             <div class="space-y-1">
-                                <label class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">Имэйл</label>
-                                <div class="text-slate-900 dark:text-slate-200 font-medium bg-slate-50 dark:bg-slate-900/50 px-4 py-3 rounded-lg border border-gray-200 dark:border-slate-700/50">
+                                <label class="text-xs uppercase tracking-wider text-slate-500 font-semibold">Имэйл</label>
+                                <div class="text-slate-200 font-medium bg-slate-900/50 px-4 py-3 rounded-lg border border-slate-700/50">
                                     {{ Auth::user()->email }}
                                 </div>
                             </div>
                             <div class="space-y-1">
-                                <label class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">Утас</label>
-                                <div class="text-slate-900 dark:text-slate-200 font-medium bg-slate-50 dark:bg-slate-900/50 px-4 py-3 rounded-lg border border-gray-200 dark:border-slate-700/50">
+                                <label class="text-xs uppercase tracking-wider text-slate-500 font-semibold">Утас</label>
+                                <div class="text-slate-200 font-medium bg-slate-900/50 px-4 py-3 rounded-lg border border-slate-700/50">
                                     {{ Auth::user()->phone ?? 'Бүртгэлгүй' }}
                                 </div>
                             </div>
                             <div class="space-y-1">
-                                <label class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">Хаяг</label>
-                                <div class="text-slate-900 dark:text-slate-200 font-medium bg-slate-50 dark:bg-slate-900/50 px-4 py-3 rounded-lg border border-gray-200 dark:border-slate-700/50">
+                                <label class="text-xs uppercase tracking-wider text-slate-500 font-semibold">Хаяг</label>
+                                <div class="text-slate-200 font-medium bg-slate-900/50 px-4 py-3 rounded-lg border border-slate-700/50">
                                     {{ Auth::user()->address ?? 'Бүртгэлгүй' }}
                                 </div>
                             </div>
                             <div class="space-y-1">
-                                <label class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">Хүйс</label>
-                                <div class="text-slate-900 dark:text-slate-200 font-medium bg-slate-50 dark:bg-slate-900/50 px-4 py-3 rounded-lg border border-gray-200 dark:border-slate-700/50">
+                                <label class="text-xs uppercase tracking-wider text-slate-500 font-semibold">Хүйс</label>
+                                <div class="text-slate-200 font-medium bg-slate-900/50 px-4 py-3 rounded-lg border border-slate-700/50">
                                     {{ Auth::user()->gender ?? 'Тодорхойгүй' }}
                                 </div>
                             </div>
                             <div class="space-y-1">
-                                <label class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">Нас</label>
-                                <div class="text-slate-900 dark:text-slate-200 font-medium bg-slate-50 dark:bg-slate-900/50 px-4 py-3 rounded-lg border border-gray-200 dark:border-slate-700/50">
+                                <label class="text-xs uppercase tracking-wider text-slate-500 font-semibold">Нас</label>
+                                <div class="text-slate-200 font-medium bg-slate-900/50 px-4 py-3 rounded-lg border border-slate-700/50">
                                     {{ Auth::user()->age ?? 'Тодорхойгүй' }}
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Recent Activity -->
-                    <div class="bg-white dark:bg-slate-800/50 backdrop-blur-xl border border-gray-200 dark:border-slate-700 rounded-2xl p-6">
-                        <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2 border-b border-gray-200 dark:border-slate-700 pb-4">
+                    <!-- Recent Activity (Placeholder) -->
+                    <div class="bg-slate-800/50 backdrop-blur-xl border border-slate-700 rounded-2xl p-6">
+                        <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2 border-b border-slate-700 pb-4">
                             <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             Сүүлийн үйл ажиллагаа
                         </h3>
                         
                         <div class="space-y-4">
-                            @if(isset($continueReading) && $continueReading && $continueReading->book)
-                                <!-- Last Read Book -->
-                                <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-900/30 border border-gray-200 dark:border-slate-700/50 hover:border-gray-300 dark:hover:border-slate-600 transition-colors">
-                                    <div class="w-16 h-16 rounded-lg overflow-hidden bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
-                                        @php
-                                            $cover = $continueReading->book->cover_image ? asset('storage/' . $continueReading->book->cover_image) : null;
-                                        @endphp
-                                        @if($cover)
-                                            <img src="{{ $cover }}" alt="{{ $continueReading->book->title }}" class="w-full h-full object-cover">
-                                        @else
-                                            <svg class="w-8 h-8 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m-3-3h6M5 6h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2z"></path></svg>
-                                        @endif
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-slate-900 dark:text-slate-200 font-medium truncate">Сүүлд уншсан: {{ $continueReading->book->title }}</p>
-                                        <p class="text-slate-600 dark:text-slate-400 text-xs truncate">Зохиолч: {{ $continueReading->book->author_display ?? $continueReading->book->author }}</p>
-                                        <p class="text-slate-600 dark:text-slate-400 text-xs">Хуудас: {{ $continueReading->current_page }} @if($continueReading->percentage) • {{ round($continueReading->percentage) }}% @endif</p>
-                                    </div>
-                                    <div class="shrink-0">
-                                        <a href="{{ route('books.read', $continueReading->book_id) }}" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-medium transition-colors">
-                                            Үргэлжлүүлэн унших
-                                        </a>
-                                    </div>
-                                </div>
-                            @else
-                                <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-900/30 border border-gray-200 dark:border-slate-700/50">
-                                    <div class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-500">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    </div>
-                                    <div>
-                                        <p class="text-slate-900 dark:text-slate-200 text-sm">Сүүлд уншсан номын мэдээлэл алга байна</p>
-                                        <p class="text-slate-600 dark:text-slate-500 text-xs">Ном уншаад автоматаар хадгалагдана</p>
-                                    </div>
-                                </div>
-                            @endif
-                            <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-900/30 border border-gray-200 dark:border-slate-700/50 hover:border-gray-300 dark:hover:border-slate-600 transition-colors">
+                            <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-900/30 border border-slate-700/50 hover:border-slate-600 transition-colors">
                                 <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                 </div>
                                 <div>
-                                    <p class="text-slate-900 dark:text-slate-200 text-sm">Бүртгэл үүсгэсэн</p>
-                                    <p class="text-slate-600 dark:text-slate-500 text-xs">{{ Auth::user()->created_at->diffForHumans() }}</p>
+                                    <p class="text-slate-200 text-sm">Бүртгэл үүсгэсэн</p>
+                                    <p class="text-slate-500 text-xs">{{ Auth::user()->created_at->diffForHumans() }}</p>
                                 </div>
                             </div>
                         </div>
@@ -209,11 +174,11 @@
             </div>
         @else
             <div class="flex flex-col items-center justify-center py-20 text-center">
-                <div class="w-24 h-24 bg-slate-200 dark:bg-slate-800 rounded-full flex items-center justify-center mb-6">
-                    <svg class="w-12 h-12 text-slate-500 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                <div class="w-24 h-24 bg-slate-800 rounded-full flex items-center justify-center mb-6">
+                    <svg class="w-12 h-12 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                 </div>
-                <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Нэвтрэх шаардлагатай</h2>
-                <p class="text-slate-600 dark:text-slate-400 mb-8 max-w-md">Та өөрийн профайл мэдээллийг харахын тулд системд нэвтрэх эсвэл бүртгүүлэх шаардлагатай.</p>
+                <h2 class="text-2xl font-bold text-white mb-2">Нэвтрэх шаардлагатай</h2>
+                <p class="text-slate-400 mb-8 max-w-md">Та өөрийн профайл мэдээллийг харахын тулд системд нэвтрэх эсвэл бүртгүүлэх шаардлагатай.</p>
                 <div class="flex gap-4">
                     <a href="{{ route('login') }}" class="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold transition-all shadow-lg shadow-blue-900/20">
                         Нэвтрэх

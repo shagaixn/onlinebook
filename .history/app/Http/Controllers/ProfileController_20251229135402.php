@@ -5,12 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\ReadingProgress;
 
 class ProfileController extends Controller
 {
     public function show()
     {
-        return view('include.profile');
+        $continueReading = null;
+        if (Auth::check()) {
+            $continueReading = ReadingProgress::with('book')
+                ->where('user_id', Auth::id())
+                ->orderBy('updated_at', 'desc')
+                ->first();
+        }
+        return view('include.profile', compact('continueReading'));
     }
 
     public function edit()

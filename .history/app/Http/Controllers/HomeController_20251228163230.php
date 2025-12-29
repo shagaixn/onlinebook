@@ -40,23 +40,7 @@ class HomeController extends Controller
         // Categories for dropdown (auto-updates when admin adds new ones)
         $categories = \App\Models\BookCategory::orderBy('name')->get(['id','name']);
 
-        // When no category filter is applied, prepare rows: each category with up to 10 latest books
-        $categoryRows = collect();
-        if (!$categoryId && $categoryName === '') {
-            $cats = \App\Models\BookCategory::withCount('books')
-                ->whereHas('books')
-                ->orderByDesc('books_count')
-                ->get();
-
-            $categoryRows = $cats->map(function ($cat) {
-                return [
-                    'category' => $cat,
-                    'books' => $cat->books()->latest()->take(10)->get(),
-                ];
-            });
-        }
-
-        return view('pages.Book', compact('books', 'categories', 'categoryId', 'categoryName', 'categoryRows'));
+        return view('pages.Book', compact('books', 'categories', 'categoryId', 'categoryName'));
     }
     public function home()
     {
