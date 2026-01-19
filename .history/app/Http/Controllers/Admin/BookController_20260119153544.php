@@ -1,0 +1,198 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use Illuminate\Http\Request;
+use App\Models\Book;
+use App\Models\BookCategory;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+
+class BookController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $books = Book::all();
+        return view('layouts.admin.books.index', compact('books'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $categories = BookCategory::all();
+        return view('layouts.admin.books.create', compact('categories'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'author_name' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'published_date' => 'nullable|date',
+            'pages' => 'nullable|integer|min:1',
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'description' => 'nullable|string',
+            'category' => 'nullable|string|max:255',
+            'category_ids' => 'nullable|array',
+            'category_ids.*' => 'integer',
+            'new_categories' => 'nullable|array',
+            'new_categories.*' => 'string|max:255'
+        ]);
+
+        $data = $request->only(['title', 'price', 'published_date', 'pages', 'description']);
+        
+        // Handle author (create if not exists)
+        if ($request->filled('author_name')) {
+            $authorName = trim($request->input('author_name'));
+            $data['author'] = $authorName;
+        }
+        // Handle multiple categories (many-to-many) and legacy category
+        $categoryIds = collect();
+        
+        // Get selected category IDs from checkboxes
+        if ($request->has('category_ids')) {
+            $categoryIds = collect($request->input('category_ids'));
+        }
+        
+        // Handle new categories from dynamic input
+        if ($request->has('new_categories')) {
+            foreach ($request->input('new_categories') as $newCategoryName) {
+                $categoryName = trim($newCategoryName);
+                if ($categoryName) {
+                    $newCategory = BookCategory::firstOrCreate(['name' => $categoryName]);
+                    $categoryIds->push($newCategory->id);
+                }
+            }
+        }
+        
+        // Handle manual category input (legacy support)
+        $rawName = $request->input('category_name') ?? $request->input('category');
+        $name = is_string($rawName) ? trim($rawName) : null;
+        if ($name) {
+            $categoryModel = BookCategory::firstOrCreate(['name' => $name]);
+            $data['category_id'] = $categoryModel->id; // Legacy support
+            $categoryIds->push($categoryModel->id); // Also add to many-to-many
+        }
+        
+        // Filter out negative temp IDs
+        $categoryIds = $categoryIds->filter(function($id) {
+            return $id > 0;
+        });
+
+        if ($categoryId) {
+            $data['category_id'] = $categoryId;
+        }
+
+        // Зураг хадгалах
+        if ($request->hasFile('cover_image')) {
+            $data['cover_image'] = $request->file('cover_image')->store('covers', 'public');
+        }
+
+        $book = Book::create($data);
+        
+        // Sync many-to-many relationships
+        if ($categoryIds->isNotEmpty()) {
+            $book->categories()->sync($categoryIds->unique());
+        }
+
+        return redirect()->route('admin.books.index');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Book $book)
+    {
+        return view('layouts.admin.books.show', compact('book'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Book $book)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'category_id' => 'nullable|exists:book_categories,id|required_without:category_name',
+            'category_name' => 'nullable|string|max:255|required_without:category_id',
+        ]);
+
+        $updateData = $request->all();
+
+        // Handle multiple categories (many-to-many) and legacy category
+        $categoryIds = collect();
+        
+        // Get selected category IDs from checkboxes
+        if ($request->has('category_ids')) {
+            $categoryIds = collect($request->input('category_ids'));
+        }
+        
+        // Handle new categories from dynamic input
+        if ($request->has('new_categories')) {
+            foreach ($request->input('new_categories') as $newCategoryName) {
+                $categoryName = trim($newCategoryName);
+                if ($categoryName) {
+                    $newCategory = BookCategory::firstOrCreate(['name' => $categoryName]);
+                    $categoryIds->push($newCategory->id);
+                }
+            }
+        }
+        
+        // Handle manual category input
+        $rawName = $request->input('category_name') ?? $request->input('category');
+        $name = is_string($rawName) ? trim($rawName) : null;
+        if ($name) {
+            $categoryModel = BookCategory::firstOrCreate(['name' => $name]);
+            $updateData['category_id'] = $categoryModel->id; // Legacy support
+            $categoryIds->push($categoryModel->id); // Also add to many-to-many
+        }
+        
+        // Filter out negative temp IDs
+        $categoryIds = $categoryIds->filter(function($id) {
+            return $id > 0;
+        });
+        
+        $book->update($updateData);
+        
+        // Sync many-to-many relationships
+        if ($categoryIds->isNotEmpty()) {
+            $book->categories()->sync($categoryIds->unique());
+        }
+
+        return redirect()->route('admin.books.index');
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Book $book)
+    {
+        $categories = BookCategory::all();
+        return view('layouts.admin.books.edit', compact('book', 'categories'));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Book $book)
+    {
+        // Зураг устгах
+        if ($book->cover_image && Storage::disk('public')->exists($book->cover_image)) {
+            Storage::disk('public')->delete($book->cover_image);
+        }
+
+        $book->delete();
+
+        return redirect()->route('admin.books.index');
+    }
+}
