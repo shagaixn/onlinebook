@@ -35,7 +35,8 @@
             <a href="{{ route('admin.dashboard') }}" class="block px-6 py-3 text-gray-700 hover:bg-blue-100">📊 Book chart</a>
             <a href="{{ route('admin.users.index') }}" class="block px-6 py-3 text-gray-700 hover:bg-blue-100">👥 Хэрэглэгчид</a>
             <a href="{{ route('admin.books.index') }}" class="block px-6 py-3 text-gray-700 hover:bg-blue-100">📚 Номнууд</a>
-            <a href="{{ route('admin.authors.index') }}" class="block px-6 py-3 text-gray-700 hover:bg-blue-100">👥 Зохиочид (админ)</a>
+            <a href="{{ route('admin.authors.index') }}" class="block px-6 py-3 text-gray-700 hover:bg-blue-100">✍️ Зохиолчид</a>
+            <a href="{{ route('admin.categories.index') }}" class="block px-6 py-3 text-gray-700 hover:bg-blue-100">📂 Ангиллууд</a>
             <a href="" class="block px-6 py-3 text-gray-700 hover:bg-blue-100">⚙️ Тохиргоо</a>
            <!-- resources/views/layouts/sidebar.blade.php -->
 <form method="POST" action="{{ route('logout') }}">
