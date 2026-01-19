@@ -43,17 +43,15 @@
         @if ($book->categories && $book->categories->count() > 0)
           <div class="flex flex-wrap gap-2 mt-2">
             @foreach ($book->categories as $cat)
-              <a href="{{ route('categories.show', $cat->slug) }}" 
-                 class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm hover:bg-blue-200 dark:hover:bg-blue-800 transition">
+              <span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">
                 {{ $cat->name }}
-              </a>
+              </span>
             @endforeach
           </div>
         @elseif ($category)
-          <a href="{{ route('categories.show', $category->slug) }}" 
-             class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm hover:bg-blue-200 dark:hover:bg-blue-800 transition mt-2">
+          <span class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm mt-2">
             {{ $category->name }}
-          </a>
+          </span>
         @else
           <span class="text-gray-500">-</span>
         @endif
