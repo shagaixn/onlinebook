@@ -46,6 +46,10 @@ Route::get('/authors', [HomeController::class, 'authors'])->name('authors.index'
 // Single author (public) - this must come after the /authors list route
 Route::get('/authors/{slug}', [AuthorController::class, 'publicShow'])->name('authors.show');
 
+// Categories (public)
+Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index'])->name('categories.index');
+Route::get('/categories/{slug}', [\App\Http\Controllers\CategoryController::class, 'show'])->name('categories.show');
+
 // Auth / profile
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
@@ -86,6 +90,7 @@ Route::prefix('admin')
         Route::resource('books', BookController::class);
         Route::resource('setting', SettingController::class);
         Route::resource('authors', AuthorController::class);
+        Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
         // books.index already provided by resource('books') so no extra Route::get('/books') needed
     });
 
