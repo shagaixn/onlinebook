@@ -63,7 +63,21 @@
                         {{ $book->author_display ?? '-' }}
                     </td>
                     <td class="px-4 py-2 text-gray-700">
-                        {{ $book->category ?? optional($book->categoryModel)->name ?? '-' }}
+                        @if ($book->categories && $book->categories->count() > 0)
+                            <div class="flex flex-wrap gap-1">
+                                @foreach($book->categories as $cat)
+                                    <span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-xs">
+                                        {{ $cat->name }}
+                                    </span>
+                                @endforeach
+                            </div>
+                        @elseif ($book->categoryModel)
+                            <span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-xs">
+                                {{ $book->categoryModel->name }}
+                            </span>
+                        @else
+                            <span class="text-gray-400">-</span>
+                        @endif
                     </td>
                     <td class="px-4 py-2 text-gray-700">{{ number_format($book->price) }}₮</td>
                     <td class="px-4 py-2 text-gray-700">

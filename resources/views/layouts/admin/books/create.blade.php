@@ -24,10 +24,26 @@
 
     <div>
       <label class="block font-medium text-gray-700 mb-1">Ангилал</label>
-      <input type="text" name="category" value="{{ old('category') }}" required
+      <input type="text" name="category" value="{{ old('category') }}"
              class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-200 focus:border-blue-500">
-      <p class="text-xs text-gray-500 mt-1">Ангиллын нэрийг шууд бичнэ үү.</p>
+      <p class="text-xs text-gray-500 mt-1">Ангиллын нэрийг шууд бичнэ үү (шинэ нэр бол автоматаар үүснэ).</p>
     </div>
+
+    @if($categories->count() > 0)
+    <div>
+      <label class="block font-medium text-gray-700 mb-2">Эсвэл сонгох (олон ангилал сонгож болно)</label>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-48 overflow-y-auto border border-gray-200 rounded-lg p-3">
+        @foreach($categories as $cat)
+        <label class="flex items-center gap-2 text-sm hover:bg-gray-50 p-2 rounded cursor-pointer">
+          <input type="checkbox" name="category_ids[]" value="{{ $cat->id }}" 
+                 {{ in_array($cat->id, old('category_ids', [])) ? 'checked' : '' }}
+                 class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+          <span>{{ $cat->name }}</span>
+        </label>
+        @endforeach
+      </div>
+    </div>
+    @endif
 
     <div>
       <label class="block font-medium text-gray-700 mb-1">Хэвлэгдсэн огноо</label>

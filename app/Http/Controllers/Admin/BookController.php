@@ -15,7 +15,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::all();
+        $books = Book::with(['categories', 'categoryModel', 'authorModel'])->paginate(20);
         return view('layouts.admin.books.index', compact('books'));
     }
 
@@ -35,35 +35,58 @@ class BookController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            'category_id' => 'nullable|exists:book_categories,id|required_without:category_name',
-            'category_name' => 'nullable|string|max:255|required_without:category_id',
+            'author_name' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'category' => 'nullable|string|max:255',
+            'category_ids' => 'nullable|array',
+            'category_ids.*' => 'exists:book_categories,id',
+            'published_date' => 'nullable|date',
+            'price' => 'nullable|numeric|min:0',
+            'pages' => 'nullable|integer|min:1',
+            'cover_image' => 'nullable|image|max:5120',
         ]);
 
         $data = $request->all();
 
-        // Resolve category: use provided ID or create/find by name
-        $categoryId = $request->input('category_id');
-        if (!$categoryId) {
-            $rawName = $request->input('category_name') ?? $request->input('category');
-            $name = is_string($rawName) ? trim($rawName) : null;
-            if ($name) {
-                $categoryModel = BookCategory::firstOrCreate(['name' => $name]);
-                $categoryId = $categoryModel->id;
-            }
+        // Auto-create author if needed
+        if (!empty($data['author_name'])) {
+            $authorName = trim($data['author_name']);
+            $author = \App\Models\Author::firstOrCreate(
+                ['name' => $authorName],
+                ['slug' => \Illuminate\Support\Str::slug($authorName)]
+            );
+            $data['author_id'] = $author->id;
+            $data['author'] = $author->name;
         }
-        if ($categoryId) {
+
+        // Handle single category (backward compatibility)
+        $categoryId = null;
+        if (!empty($data['category'])) {
+            $categoryName = trim($data['category']);
+            $categoryModel = BookCategory::firstOrCreate(
+                ['name' => $categoryName],
+                ['slug' => \Illuminate\Support\Str::slug($categoryName)]
+            );
+            $categoryId = $categoryModel->id;
             $data['category_id'] = $categoryId;
         }
 
-        // Зураг хадгалах
+        // Cover image
         if ($request->hasFile('cover_image')) {
             $data['cover_image'] = $request->file('cover_image')->store('covers', 'public');
         }
 
-        Book::create($data);
+        $book = Book::create($data);
 
-        return redirect()->route('admin.books.index');
+        // Attach multiple categories if provided
+        if (!empty($request->category_ids)) {
+            $book->categories()->attach($request->category_ids);
+        } elseif ($categoryId) {
+            // If single category was created, also attach it to many-to-many
+            $book->categories()->attach($categoryId);
+        }
+
+        return redirect()->route('admin.books.index')->with('success', 'Ном амжилттай нэмэгдлээ');
     }
 
     /**
@@ -81,30 +104,65 @@ class BookController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            'category_id' => 'nullable|exists:book_categories,id|required_without:category_name',
-            'category_name' => 'nullable|string|max:255|required_without:category_id',
+            'author_name' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'category' => 'nullable|string|max:255',
+            'category_ids' => 'nullable|array',
+            'category_ids.*' => 'exists:book_categories,id',
+            'published_date' => 'nullable|date',
+            'price' => 'nullable|numeric|min:0',
+            'pages' => 'nullable|integer|min:1',
+            'cover_image' => 'nullable|image|max:5120',
         ]);
 
         $updateData = $request->all();
 
-        // Resolve category on update
-        $categoryId = $request->input('category_id');
-        if (!$categoryId) {
-            $rawName = $request->input('category_name') ?? $request->input('category');
-            $name = is_string($rawName) ? trim($rawName) : null;
-            if ($name) {
-                $categoryModel = BookCategory::firstOrCreate(['name' => $name]);
-                $categoryId = $categoryModel->id;
-            }
+        // Auto-create author if needed
+        if (!empty($updateData['author_name'])) {
+            $authorName = trim($updateData['author_name']);
+            $author = \App\Models\Author::firstOrCreate(
+                ['name' => $authorName],
+                ['slug' => \Illuminate\Support\Str::slug($authorName)]
+            );
+            $updateData['author_id'] = $author->id;
+            $updateData['author'] = $author->name;
         }
-        if ($categoryId) {
+
+        // Handle single category
+        $categoryId = null;
+        if (!empty($updateData['category'])) {
+            $categoryName = trim($updateData['category']);
+            $categoryModel = BookCategory::firstOrCreate(
+                ['name' => $categoryName],
+                ['slug' => \Illuminate\Support\Str::slug($categoryName)]
+            );
+            $categoryId = $categoryModel->id;
             $updateData['category_id'] = $categoryId;
+        }
+
+        // Handle cover image
+        if ($request->hasFile('cover_image')) {
+            // Delete old image
+            if ($book->cover_image && Storage::disk('public')->exists($book->cover_image)) {
+                Storage::disk('public')->delete($book->cover_image);
+            }
+            $updateData['cover_image'] = $request->file('cover_image')->store('covers', 'public');
         }
 
         $book->update($updateData);
 
-        return redirect()->route('admin.books.index');
+        // Sync multiple categories
+        if (!empty($request->category_ids)) {
+            $book->categories()->sync($request->category_ids);
+        } elseif ($categoryId) {
+            // If single category was created, sync it
+            $book->categories()->sync([$categoryId]);
+        } else {
+            // Clear all categories if none provided
+            $book->categories()->sync([]);
+        }
+
+        return redirect()->route('admin.books.index')->with('success', 'Ном амжилттай шинэчлэгдлээ');
     }
 
     /**
@@ -112,7 +170,8 @@ class BookController extends Controller
      */
     public function edit(Book $book)
     {
-        $categories = BookCategory::all();
+        $book->load('categories'); // Load many-to-many categories
+        $categories = BookCategory::orderBy('name')->get();
         return view('layouts.admin.books.edit', compact('book', 'categories'));
     }
 

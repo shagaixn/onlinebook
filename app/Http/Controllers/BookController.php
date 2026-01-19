@@ -93,7 +93,7 @@ class BookController extends Controller
 
     public function show($id)
     {
-        $book = Book::with(['reviews.user', 'categoryModel', 'authorModel'])->findOrFail($id);
+        $book = Book::with(['reviews.user', 'categoryModel', 'authorModel', 'categories'])->findOrFail($id);
         $category = null;
         if ($book->category_id) {
             $category = BookCategory::find($book->category_id);
@@ -107,18 +107,24 @@ class BookController extends Controller
             $inWishlist = in_array($id, $wishlistIds);
         }
 
-        // Related books
-        $relatedBooks = Book::where('id', '!=', $id)
-            ->where(function($q) use ($book) {
-                if ($book->category_id) {
-                    $q->where('category_id', $book->category_id);
-                } elseif ($book->category) {
-                    $q->where('category', $book->category);
-                }
-            })
-            ->inRandomOrder()
-            ->take(3)
-            ->get();
+        // Related books - from same categories (many-to-many) or fallback to single category
+        $relatedBooks = collect();
+        if ($book->categories && $book->categories->count() > 0) {
+            $categoryIds = $book->categories->pluck('id')->toArray();
+            $relatedBooks = Book::where('id', '!=', $id)
+                ->whereHas('categories', function($q) use ($categoryIds) {
+                    $q->whereIn('book_categories.id', $categoryIds);
+                })
+                ->inRandomOrder()
+                ->take(3)
+                ->get();
+        } elseif ($book->category_id) {
+            $relatedBooks = Book::where('id', '!=', $id)
+                ->where('category_id', $book->category_id)
+                ->inRandomOrder()
+                ->take(3)
+                ->get();
+        }
 
         return view('books.show', compact('book', 'category', 'inWishlist', 'relatedBooks'));
     }
@@ -141,7 +147,7 @@ class BookController extends Controller
 
         DB::beginTransaction();
         try {
-            // determine author: prefer explicit author_id; otherwise try to find author by name
+            // Auto-create author if needed
             $authorName = null;
             $authorId = null;
 
@@ -153,14 +159,20 @@ class BookController extends Controller
                 }
             } elseif (!empty($validated['author_name'])) {
                 $inputName = trim($validated['author_name']);
-                // try to find existing author by name (you may want to use lower-case comparison if needed)
+                // Try to find existing author by name
                 $existing = Author::where('name', $inputName)->first();
                 if ($existing) {
                     $authorId = $existing->id;
                     $authorName = $existing->name;
                 } else {
-                    // keep the provided name but DO NOT create a new Author record (per requirement)
-                    $authorName = $inputName;
+                    // AUTO-CREATE new author if not exists
+                    $newAuthor = Author::create([
+                        'name' => $inputName,
+                        'slug' => Str::slug($inputName),
+                    ]);
+                    $authorId = $newAuthor->id;
+                    $authorName = $newAuthor->name;
+                    Log::info('Auto-created new author', ['id' => $authorId, 'name' => $authorName]);
                 }
             }
 
@@ -239,7 +251,7 @@ class BookController extends Controller
             'published_date' => $validated['published_date'] ?? null,
         ];
 
-        // author: prefer selected existing author, otherwise use provided author_name (but DO NOT create new Author record)
+        // author: auto-create if not exists
         $authorName = null;
         $authorId = null;
 
@@ -251,13 +263,19 @@ class BookController extends Controller
             }
         } elseif (!empty($validated['author_name'])) {
             $inputName = trim($validated['author_name']);
-            // try to find existing author by name
+            // Try to find existing author by name
             $existing = Author::where('name', $inputName)->first();
             if ($existing) {
                 $authorId = $existing->id;
                 $authorName = $existing->name;
             } else {
-                $authorName = $inputName;
+                // AUTO-CREATE new author if not exists
+                $newAuthor = Author::create([
+                    'name' => $inputName,
+                    'slug' => Str::slug($inputName),
+                ]);
+                $authorId = $newAuthor->id;
+                $authorName = $newAuthor->name;
             }
         }
 

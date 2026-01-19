@@ -51,6 +51,13 @@ class Book extends Model
         return $this->belongsTo(\App\Models\BookCategory::class, 'category_id');
     }
 
+    // Many-to-many relationship with categories
+    public function categories()
+    {
+        return $this->belongsToMany(\App\Models\BookCategory::class, 'book_book_category', 'book_id', 'book_category_id')
+                    ->withTimestamps();
+    }
+
     public function reviews()
     {
         return $this->hasMany(\App\Models\Review::class);

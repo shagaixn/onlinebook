@@ -28,27 +28,47 @@
 
         <div>
             <label class="block font-medium text-gray-700 mb-1">Зохиолчийн нэр</label>
-      <input type="text" name="author_name" value="{{ old('author_name') }}" required
-             class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-200 focus:border-blue-500">focus:border-blue-500" required>
+            <input type="text" name="author_name" value="{{ old('author_name', $book->author ?? $book->authorModel?->name) }}"
+                   class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-200 focus:border-blue-500">
+            <p class="text-xs text-gray-500 mt-1">Шинэ зохиолч бол автоматаар бүртгэгдэнэ.</p>
+        </div>
+
+        <div>
+            <label class="block font-medium text-gray-700 mb-1">Ангилал (шууд бичих)</label>
+            <input type="text" name="category" value="{{ old('category', $book->category ?? $book->categoryModel?->name) }}"
+                   class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-200 focus:border-blue-500">
+            <p class="text-xs text-gray-500 mt-1">Шинэ ангилал бол автоматаар үүснэ.</p>
+        </div>
+
+        @if($categories->count() > 0)
+        <div>
+            <label class="block font-medium text-gray-700 mb-2">Эсвэл сонгох (олон ангилал сонгож болно)</label>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-48 overflow-y-auto border border-gray-200 rounded-lg p-3">
+                @foreach($categories as $cat)
+                @php
+                    $isChecked = $book->categories->contains($cat->id) || in_array($cat->id, old('category_ids', []));
+                @endphp
+                <label class="flex items-center gap-2 text-sm hover:bg-gray-50 p-2 rounded cursor-pointer">
+                    <input type="checkbox" name="category_ids[]" value="{{ $cat->id }}" 
+                           {{ $isChecked ? 'checked' : '' }}
+                           class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                    <span>{{ $cat->name }}</span>
+                </label>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
+        <div>
+            <label class="block text-gray-700 font-medium mb-1">📅 Хэвлэгдсэн огноо</label>
+            <input type="date" name="published_date" value="{{ old('published_date', $book->published_date?->format('Y-m-d')) }}"
+                   class="w-full border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-500">
         </div>
 
         <div class="grid grid-cols-2 gap-4">
-            <div>
-                <label class="block font-medium text-gray-700 mb-1">Ангилал</label>
-      <input type="text" name="category" value="{{ old('category') }}" required
-             class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-200 focus:border-blue-500">
-            </div>
             <div>
                 <label class="block text-gray-700 font-medium mb-1">💰 Үнэ (₮)</label>
                 <input type="number" name="price" value="{{ old('price', $book->price) }}"
-                       class="w-full border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-500">
-            </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-4">
-            <div>
-                <label class="block text-gray-700 font-medium mb-1">📅 Хэвлэгдсэн огноо</label>
-                <input type="date" name="published_date" value="{{ old('published_date', $book->published_date) }}"
                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-500">
             </div>
             <div>

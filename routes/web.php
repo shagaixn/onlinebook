@@ -86,6 +86,7 @@ Route::prefix('admin')
         Route::resource('books', BookController::class);
         Route::resource('setting', SettingController::class);
         Route::resource('authors', AuthorController::class);
+        Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
         // books.index already provided by resource('books') so no extra Route::get('/books') needed
     });
 

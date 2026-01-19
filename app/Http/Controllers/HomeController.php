@@ -22,23 +22,51 @@ class HomeController extends Controller
         $q = trim((string) $request->get('q', ''));
         $categoryId = $request->integer('category_id');
         $categoryName = trim((string) $request->get('category', ''));
+        $authorId = $request->integer('author_id');
 
-        $query = Book::query();
+        $query = Book::with(['authorModel', 'categories', 'categoryModel']);
 
+        // Enhanced search: title, description, author name
         if ($q !== '') {
-            $query->where('title', 'like', "%{$q}%");
+            $query->where(function($subQuery) use ($q) {
+                $subQuery->where('title', 'like', "%{$q}%")
+                         ->orWhere('description', 'like', "%{$q}%")
+                         ->orWhere('author', 'like', "%{$q}%")
+                         ->orWhereHas('authorModel', function($authorQuery) use ($q) {
+                             $authorQuery->where('name', 'like', "%{$q}%");
+                         });
+            });
         }
 
+        // Filter by category (supports both single and many-to-many)
         if ($categoryId) {
-            $query->where('category_id', $categoryId);
+            $query->where(function($catQuery) use ($categoryId) {
+                $catQuery->where('category_id', $categoryId)
+                         ->orWhereHas('categories', function($manyQuery) use ($categoryId) {
+                             $manyQuery->where('book_categories.id', $categoryId);
+                         });
+            });
         } elseif ($categoryName !== '') {
-            $query->where('category', $categoryName);
+            $query->where(function($catQuery) use ($categoryName) {
+                $catQuery->where('category', $categoryName)
+                         ->orWhereHas('categories', function($manyQuery) use ($categoryName) {
+                             $manyQuery->where('book_categories.name', $categoryName);
+                         });
+            });
+        }
+
+        // Filter by author
+        if ($authorId) {
+            $query->where('author_id', $authorId);
         }
 
         $books = $query->orderByDesc('created_at')->get();
 
-        // Categories for dropdown (auto-updates when admin adds new ones)
+        // Categories for dropdown
         $categories = \App\Models\BookCategory::orderBy('name')->get(['id','name']);
+
+        // Authors for filter dropdown
+        $authors = \App\Models\Author::orderBy('name')->get(['id','name']);
 
         // When no category filter is applied, prepare rows: each category with up to 10 latest books
         $categoryRows = collect();
@@ -56,7 +84,7 @@ class HomeController extends Controller
             });
         }
 
-        return view('pages.Book', compact('books', 'categories', 'categoryId', 'categoryName', 'categoryRows'));
+        return view('pages.Book', compact('books', 'categories', 'categoryId', 'categoryName', 'categoryRows', 'authors', 'authorId'));
     }
     public function home()
     {
