@@ -1,7 +1,7 @@
 @php($bodyClass = request()->cookie('theme')==='dark' ? 'night-sky' : '')
 @include('include.header')
 
-<div class="min-h-screen bg-dark-50 night-sky dark:bg-[#0f172a] text-slate-900 dark:text-white pt-24 pb-12 relative overflow-hidden flex items-center justify-center">
+<div class="min-h-screen bg-dark-50 night- dark:bg-[#0f172a] text-slate-900 dark:text-white pt-24 pb-12 relative overflow-hidden flex items-center justify-center">
     <!-- Background Elements -->
 
 

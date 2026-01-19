@@ -17,11 +17,23 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Social Login
+Route::get('login/{provider}', [SocialController::class, 'redirectToProvider'])->where('provider', 'facebook|twitter|instagram')->name('social.redirect');
+Route::get('login/{provider}/callback', [SocialController::class, 'handleProviderCallback'])->where('provider', 'facebook|twitter|instagram')->name('social.callback');
+
+
 // Public
 Route::get('/home', [HomeController::class, 'home'])->name('home');
 Route::get('/book', [HomeController::class, 'book'])->name('book');
 Route::get('/subscription', [HomeController::class, 'subscription'])->name('subscription');
+Route::post('/subscription/pay', [App\Http\Controllers\SubscriptionController::class, 'pay'])->name('subscription.pay');
 Route::get('/service', [HomeController::class, 'service'])->name('service');
+Route::get('/podcast', function () {
+    return view('pages.podcast');
+})->name('podcast');
+Route::get('/manga', function () {
+    return view('pages.manga');
+})->name('manga');
 Route::get('show', [HomeController::class, 'show'])->name('show');
 
 
@@ -38,8 +50,17 @@ Route::get('/authors/{slug}', [AuthorController::class, 'publicShow'])->name('au
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile/change-password', function () {
+        return view('profile.change_password');
+    })->name('profile.changePasswordForm');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.changePassword');
+    
+    // Reviews
+    Route::post('/reviews', [\App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
+    
+    // Reading Progress
+    Route::post('/books/{id}/progress', [\App\Http\Controllers\BookController::class, 'saveProgress'])->name('books.progress');
 });
 
 // Auth routes
@@ -49,12 +70,6 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
-
-// Social login
-Route::get('login/facebook', [SocialController::class, 'redirectToFacebook'])->name('login.facebook');
-Route::get('login/facebook/callback', [SocialController::class, 'handleFacebookCallback']);
-Route::get('login/instagram', [SocialController::class, 'redirectToInstagram'])->name('login.instagram');
-Route::get('login/instagram/callback', [SocialController::class, 'handleInstagramCallback']);
 
 // Admin routes (auth + admin middleware)
 Route::prefix('admin')

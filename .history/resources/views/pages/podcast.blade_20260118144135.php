@@ -17,7 +17,7 @@
             Тун удахгүй...
         </p>
         
-        <a href="{{ route('home') }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-slate-900 bg-white/10 hover:bg-slate-800 dark:hover:bg-white/10 border border-transparent dark:border-white/10 text-white transition-all duration-300 backdrop-blur-sm">
+        <a href="{{ route('home') }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-slate-900 dark:bg-white/10 hover:bg-slate-800 dark:hover:bg-white/20 border border-transparent dark:border-white/10 text-white transition-all duration-300 backdrop-blur-sm">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             Нүүр хуудас руу буцах
         </a>

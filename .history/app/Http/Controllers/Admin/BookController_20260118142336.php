@@ -104,16 +104,7 @@ class BookController extends Controller
 
         $book->update($updateData);
 
-        return redirect()->route('admin.books.index');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Book $book)
-    {
-        $categories = BookCategory::all();
-        return view('layouts.admin.books.edit', compact('book', 'categories'));
+        return redirect()->route('books.index');
     }
 
     /**
@@ -121,13 +112,8 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
-        // Зураг устгах
-        if ($book->cover_image && Storage::disk('public')->exists($book->cover_image)) {
-            Storage::disk('public')->delete($book->cover_image);
-        }
-
         $book->delete();
 
-        return redirect()->route('admin.books.index');
+        return redirect()->route('books.index');
     }
 }

@@ -62,38 +62,38 @@
 
 
   {{-- ================= FEATURED BOOKS ================= --}}
-  <section class="max-w-6xl mx-auto px-6 mt-24">
-    <div class="flex justify-between items-end mb-6">
-      <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Шилдэг үнэлгээтэй</h2>
+  <section class="max-w-6xl mx-auto px-6 py-16 relative z-10">
+    <div class="flex justify-between items-center mb-12">
+      <h2 class="text-2xl font-light text-gray-900 dark:text-white">Онцлох номууд</h2>
       <a href="{{ route('book', ['sort' => 'rating']) }}" 
-         class="text-cyan-600 dark:text-cyan-300 hover:underline text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 rounded px-2">
-        Бүгдийг харах
+         class="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
+        Бүгдийг үзэх →
       </a>
     </div>
 
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
       @if($topRatedBooks->isNotEmpty())
         @foreach($topRatedBooks->take(6) as $book)
           <div class="book-card">
-            <a href="{{ route('books.show', $book->id) }}" class="block group focus:outline-none focus:ring-2 focus:ring-yellow-400 rounded-xl">
-              <div class="relative aspect-[2/3] rounded-xl overflow-hidden mb-3">
+            <a href="{{ route('books.show', $book->id) }}" class="block group">
+              <div class="aspect-[2/3] rounded-lg overflow-hidden mb-4 bg-gray-100 dark:bg-white/10 border dark:border-white/10">
                 <img 
                   src="{{ $book->cover_image ? asset('storage/'.$book->cover_image) : asset('images/placeholder-book.png') }}" 
                   alt="{{ $book->title }}"
-                  class="w-full h-full object-cover transition duration-500 group-hover:scale-110"
+                  class="w-full h-full object-cover"
                   loading="lazy">
-                <div class="absolute top-2 right-2 bg-black/60 backdrop-blur px-2 py-1 rounded-lg flex items-center gap-1">
-                  <span class="text-yellow-400 text-xs" aria-hidden="true">★</span>
-                  <span class="text-white text-xs font-bold">{{ number_format($book->reviews_avg_rating ?? 0, 1) }}</span>
-                </div>
               </div>
-              <h3 class="text-slate-900 dark:text-white font-semibold truncate group-hover:text-cyan-600 dark:group-hover:text-cyan-300 transition">{{ $book->title }}</h3>
-              <p class="text-slate-500 dark:text-slate-400 text-sm truncate">{{ $book->author ?? $book->authorModel?->name ?? 'Unknown' }}</p>
+              <h3 class="font-medium text-gray-900 dark:text-white text-sm mb-1 line-clamp-2 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">
+                {{ $book->title }}
+              </h3>
+              <p class="text-gray-500 dark:text-gray-400 text-xs">
+                {{ $book->author ?? $book->authorModel?->name ?? 'Unknown' }}
+              </p>
             </a>
           </div>
         @endforeach
       @else
-        <div class="col-span-full text-center py-12 text-slate-500">Одоогоор ном байхгүй байна.</div>
+        <div class="col-span-full text-center py-16 text-gray-500">Одоогоор ном байхгүй байна.</div>
       @endif
     </div>
   </section>

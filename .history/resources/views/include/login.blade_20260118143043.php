@@ -1,41 +1,20 @@
-@php($bodyClass = request()->cookie('theme')==='dark' ? 'night-sky' : '')
 @include('include.header')
 
-<div class="min-h-screen bg-dark-50 night-sky dark:bg-[#0f172a] text-slate-900 dark:text-white pt-24 pb-12 relative overflow-hidden flex items-center justify-center">
+<div class="min-h-screen bg-dark-50 dark:bg-[#0f172a] text-slate-900 dark:text-white pt-24 pb-12 relative overflow-hidden flex items-center justify-center">
     <!-- Background Elements -->
-
-
+    
     <div class="w-full max-w-md px-4 relative z-10">
-        <div class="bg-dark dark:bg-dark-800/50 backdrop-blur-xl border border-gray-200 dark:border-slate-700 rounded-2xl p-8 shadow-2xl">
+        <div class="bg-dark dark:bg-slate-800/50 backdrop-blur-xl border border-gray-200 dark:border-slate-700 rounded-2xl p-8 shadow-2xl">
             <div class="text-center mb-8">
-                <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-dark from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 mb-2">
-                    Бүртгүүлэх
+                <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-dark-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 mb-2">
+                    Нэвтрэх
                 </h1>
-                <p class="text-slate-600 dark:text-slate-400">Book Plus-д нэгдээрэй!</p>
+                <p class="text-slate-600 dark:text-slate-400">Book Plus-д дахин тавтай морил!</p>
             </div>
 
-            <form method="POST" action="{{ route('register') }}" class="space-y-6">
+            <form method="POST" action="{{ route('login') }}" class="space-y-6">
                 @csrf
-
-                <!-- Name -->
-                <div>
-                    <label for="name" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Нэр</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-5 w-5 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                            </svg>
-                        </div>
-                        <input type="text" name="name" id="name" required autofocus
-                               class="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-slate-900/50 border border-gray-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
-                               placeholder="Таны нэр">
-                    </div>
-                    @error('name')
-                        <p class="mt-1 text-sm text-red-500 dark:text-red-400">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <!-- Email -->
+                
                 <div>
                     <label for="email" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Имэйл</label>
                     <div class="relative">
@@ -44,7 +23,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                             </svg>
                         </div>
-                        <input type="email" name="email" id="email" required
+                        <input type="email" name="email" id="email" required autofocus
                                class="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-slate-900/50 border border-gray-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
                                placeholder="name@example.com">
                     </div>
@@ -53,7 +32,6 @@
                     @enderror
                 </div>
 
-                <!-- Password -->
                 <div>
                     <label for="password" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Нууц үг</label>
                     <div class="relative">
@@ -63,31 +41,30 @@
                             </svg>
                         </div>
                         <input type="password" name="password" id="password" required
-                               class="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-slate-900/50 border border-gray-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                               class="w-full pl-10 pr-10 py-3 bg-gray-50 dark:bg-slate-900/50 border border-gray-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
                                placeholder="••••••••">
+                        <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-slate-300">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                            </svg>
+                        </button>
                     </div>
                     @error('password')
                         <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- Confirm Password -->
-                <div>
-                    <label for="password_confirmation" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Нууц үг давтах</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-5 w-5 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                        </div>
-                        <input type="password" name="password_confirmation" id="password_confirmation" required
-                               class="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-slate-900/50 border border-gray-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
-                               placeholder="••••••••">
-                    </div>
+                <div class="flex items-center justify-between">
+                    @if (Route::has('password.request'))
+                        <a href="{{ route('password.request') }}" class="text-sm text-blue-400 hover:text-blue-300 transition-colors">
+                            Нууц үг мартсан?
+                        </a>
+                    @endif
                 </div>
 
-                <button type="submit" class="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 dark:text-slate-400 rounded-xl font-bold shadow-lg shadow-blue-900/20 transition-all hover:-translate-y-0.5">
-                    Бүртгүүлэх
+                <button type="submit" class="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-900 dark:text-slate-400 rounded-xl font-bold shadow-lg shadow-blue-900/20 transition-all hover:-translate-y-0.5">
+                    Нэвтрэх
                 </button>
             </form>
 
@@ -97,7 +74,7 @@
                         <div class="w-full border-t border-slate-700"></div>
                     </div>
                     <div class="relative flex justify-center text-sm">
-                        <span class="px-2 bg-dark dark:bg-slate-800 dark:text-slate-400">Эсвэл</span>
+                        <span class="px-2 bg-slate-800 text-slate-400"></span>
                     </div>
                 </div>
 
@@ -120,14 +97,30 @@
                 </div>
 
                 <p class="mt-8 text-center text-sm text-slate-400">
-                    Бүртгэлтэй юу? 
-                    <a href="{{ route('login') }}" class="text-blue-400 hover:text-blue-300 font-medium transition-colors">
-                        Нэвтрэх
+                    Бүртгэлгүй юу? 
+                    <a href="{{ route('register') }}" class="text-blue-400 hover:text-blue-300 font-medium transition-colors">
+                        Бүртгүүлэх
                     </a>
                 </p>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const pwd = document.getElementById('password');
+        const btn = document.getElementById('togglePassword');
+        
+        if (pwd && btn) {
+            btn.addEventListener('click', () => {
+                const isHidden = pwd.getAttribute('type') === 'password';
+                pwd.setAttribute('type', isHidden ? 'text' : 'password');
+                // Toggle icon opacity or color to indicate state if desired
+                btn.classList.toggle('text-blue-400');
+            });
+        }
+    });
+</script>
 
 @include('include.footer')
