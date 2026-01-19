@@ -93,7 +93,7 @@ class BookController extends Controller
 
     public function show($id)
     {
-        $book = Book::with(['reviews.user', 'categoryModel', 'authorModel'])->findOrFail($id);
+        $book = Book::with(['reviews.user', 'categoryModel', 'authorModel', 'categories'])->findOrFail($id);
         $category = null;
         if ($book->category_id) {
             $category = BookCategory::find($book->category_id);
@@ -107,18 +107,24 @@ class BookController extends Controller
             $inWishlist = in_array($id, $wishlistIds);
         }
 
-        // Related books
-        $relatedBooks = Book::where('id', '!=', $id)
-            ->where(function($q) use ($book) {
-                if ($book->category_id) {
-                    $q->where('category_id', $book->category_id);
-                } elseif ($book->category) {
-                    $q->where('category', $book->category);
-                }
-            })
-            ->inRandomOrder()
-            ->take(3)
-            ->get();
+        // Related books - from same categories (many-to-many) or fallback to single category
+        $relatedBooks = collect();
+        if ($book->categories && $book->categories->count() > 0) {
+            $categoryIds = $book->categories->pluck('id')->toArray();
+            $relatedBooks = Book::where('id', '!=', $id)
+                ->whereHas('categories', function($q) use ($categoryIds) {
+                    $q->whereIn('book_categories.id', $categoryIds);
+                })
+                ->inRandomOrder()
+                ->take(3)
+                ->get();
+        } elseif ($book->category_id) {
+            $relatedBooks = Book::where('id', '!=', $id)
+                ->where('category_id', $book->category_id)
+                ->inRandomOrder()
+                ->take(3)
+                ->get();
+        }
 
         return view('books.show', compact('book', 'category', 'inWishlist', 'relatedBooks'));
     }
