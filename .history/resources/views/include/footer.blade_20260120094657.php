@@ -9,7 +9,7 @@
     <!-- Column 1: Logo & description -->
     <div class="lg:col-span-2">
       <div class="flex items-center gap-2 mb-6">
-       <div class="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-500/30">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-600/30">
   B
 </div>
         <span class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Book Plus</span>

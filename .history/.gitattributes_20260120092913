@@ -1,0 +1,17 @@
+# Таны өөрийн PHP кодыг зөв ангилуулах
+*.php linguist-language=PHP
+*.blade.php linguist-language=Blade
+
+# Гуравдагч талын багцуудыг статистикаас хасна
+vendor/** linguist-vendored
+node_modules/** linguist-vendored
+
+# Үүсгэсэн build/cached файлуудыг статистикаас хасна
+public/** linguist-generated
+dist/** linguist-generated
+storage/framework/** linguist-generated
+bootstrap/cache/** linguist-generated
+
+# Хэрэв санамсаргүйгээр Hack файл орсон бол PHP гэж тооцмоор бол (сонголтоор)
+*.hack linguist-language=PHP
+*.hhi linguist-language=PHP

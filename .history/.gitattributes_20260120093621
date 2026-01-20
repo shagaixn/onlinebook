@@ -1,0 +1,28 @@
+# 1) Мөрийн төгсгөл
+*               text=auto eol=lf
+
+# 2) Diff driver-ууд (ухаалаг hunk header)
+*.blade.php     diff=html
+*.css           diff=css
+*.html          diff=html
+*.md            diff=markdown
+*.php           diff=php
+
+# 3) GitHub Linguist — хэлний статистик болон дуу чимээг багасгах
+vendor/**               linguist-vendored
+node_modules/**         linguist-vendored
+public/**               linguist-generated
+dist/**                 linguist-generated
+storage/framework/**    linguist-generated
+bootstrap/cache/**      linguist-generated
+
+# Хэрэв санамсаргүй Hack файлуудыг PHP гэж тооцох шаардлагатай бол (заавал биш)
+*.hack          linguist-language=PHP
+*.hhi           linguist-language=PHP
+*.php        linguist-language=PHP
+*.blade.php  linguist-language=Blade
+
+# 4) Архивлах үед хасах зүйлс (release багц цэвэр байлгах)
+ /.github           export-ignore
+CHANGELOG.md        export-ignore
+.styleci.yml        export-ignore

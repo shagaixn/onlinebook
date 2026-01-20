@@ -21,30 +21,22 @@
   /* Marquee Animations */
   @keyframes marquee-left {
     from { transform: translateX(0); }
-    to { transform: translateX(-33.33333%); } /* Move 1/3 because we have 3 sets */
+    to { transform: translateX(-50%); } /* Move half width because we duplicated content */
   }
   @keyframes marquee-right {
-    from { transform: translateX(-33.33333%); } 
+    from { transform: translateX(-50%); } 
     to { transform: translateX(0); }
   }
 
   .animate-marquee-left {
-    animation: marquee-left 45s linear infinite;
-    will-change: transform;
+    animation: marquee-left 40s linear infinite;
   }
   .animate-marquee-right {
-    animation: marquee-right 50s linear infinite; /* Slightly different speed for visual interest */
-    will-change: transform;
+    animation: marquee-right 40s linear infinite;
   }
-  /* Pause on hover with smooth transition if possible (CSS pause is instant) */
-  .marquee-content:hover {
+  /* Pause on hover */
+  .marquee-container:hover .marquee-content {
       animation-play-state: paused;
-  }
-  
-  /* Gradient Mask for fading edges */
-  .marquee-fade-mask {
-    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
   }
 </style>
 
@@ -99,7 +91,7 @@
       <canvas id="authors-canvas" class="absolute inset-0 w-full h-full pointer-events-none opacity-30"></canvas>
       
       {{-- Marquee Container --}}
-      <div class="flex flex-col gap-6 relative z-10 py-4 w-full marquee-fade-mask">
+      <div class="flex flex-col gap-6 relative z-10 py-4 w-full">
         
         {{-- Row 1: Left to Right (or Right to Left) --}}
         <div class="marquee-container flex overflow-hidden select-none">

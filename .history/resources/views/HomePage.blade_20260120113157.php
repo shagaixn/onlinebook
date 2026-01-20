@@ -99,7 +99,7 @@
       <canvas id="authors-canvas" class="absolute inset-0 w-full h-full pointer-events-none opacity-30"></canvas>
       
       {{-- Marquee Container --}}
-      <div class="flex flex-col gap-6 relative z-10 py-4 w-full marquee-fade-mask">
+      <div class="flex flex-col gap-6 relative z-10 py-4 w-full">
         
         {{-- Row 1: Left to Right (or Right to Left) --}}
         <div class="marquee-container flex overflow-hidden select-none">

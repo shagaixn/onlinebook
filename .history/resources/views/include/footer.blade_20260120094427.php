@@ -9,9 +9,9 @@
     <!-- Column 1: Logo & description -->
     <div class="lg:col-span-2">
       <div class="flex items-center gap-2 mb-6">
-       <div class="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-500/30">
-  B
-</div>
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-white dark:text-blue font-bold text-xl shadow-lg shadow-blue-500/20">
+          B
+        </div>
         <span class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Book Plus</span>
       </div>
       <p class="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed max-w-sm">

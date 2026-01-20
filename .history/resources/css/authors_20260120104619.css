@@ -1,0 +1,18 @@
+/* Avatar-д зөөлөн хөвөх хөдөлгөөн */
+@keyframes floatY {
+  0%   { transform: translateY(0) scale(1); }
+  50%  { transform: translateY(-4px) scale(1.01); }
+  100% { transform: translateY(0) scale(1); }
+}
+.author-avatar {
+  animation: floatY 6s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+/* Initial state (Blade дээр классаар өгсөн байгаа) */
+/* opacity-0 translate-y-4 */
+
+/* Hover үед бага зэрэг тодруулж харагдуулна (Tailwind group-hover-тэй зохицоно) */
+[data-author-card]:hover .author-avatar {
+  filter: saturate(1.05) contrast(1.02);
+}

@@ -17,35 +17,6 @@
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
   }
-
-  /* Marquee Animations */
-  @keyframes marquee-left {
-    from { transform: translateX(0); }
-    to { transform: translateX(-33.33333%); } /* Move 1/3 because we have 3 sets */
-  }
-  @keyframes marquee-right {
-    from { transform: translateX(-33.33333%); } 
-    to { transform: translateX(0); }
-  }
-
-  .animate-marquee-left {
-    animation: marquee-left 45s linear infinite;
-    will-change: transform;
-  }
-  .animate-marquee-right {
-    animation: marquee-right 50s linear infinite; /* Slightly different speed for visual interest */
-    will-change: transform;
-  }
-  /* Pause on hover with smooth transition if possible (CSS pause is instant) */
-  .marquee-content:hover {
-      animation-play-state: paused;
-  }
-  
-  /* Gradient Mask for fading edges */
-  .marquee-fade-mask {
-    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-  }
 </style>
 
 @php
@@ -54,16 +25,13 @@
   $isAuthenticated = $currentUser !== null;
 @endphp
 
-<main class="night-sky min-h-[100svh] w-full relative">
+<main class="night-sky min-h-[100svh] max-w-9xl mx-auto px-4 py-15">
 
   {{-- ================= HERO ================= --}}
-  <section class="w-full min-h-[100svh] flex flex-col justify-center items-center px-4 relative z-10 overflow-hidden">
-    <section id="hero" class="absolute inset-0 w-full h-full -z-10">
-      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent dark:via-white/5"></div>
-      {{-- Optional: Add background image or pattern here if needed covering full screen --}}
-    </section>
+  <section class="max-w-4xl mx-auto px-6 pt-32 pb-24 text-center relative z-10">
+    <section id="hero" class="relative overflow-hidden">
+      <div class="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-white/5 to-transparent dark:via-white/5 rounded-3xl"></div>
     
-    <div class="w-full max-w-4xl mx-auto text-center pt-20">
     <h1 class="text-4xl md:text-6xl font-light tracking-tight text-gray-900 dark:text-white mb-6">
       Мэдлэгийн<br>
       <span class="font-medium bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">Шинэ ертөнц</span>
@@ -73,7 +41,7 @@
       Цифр номын сан - хүссэн цагтаа, хүссэн газартаа
     </p>
 
-    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
       @if($isAuthenticated)
         <a href="{{ route('subscription') }}" 
            class="px-8 py-3  border border-gray-300 dark:border-white/30 text-gray-700 dark:text-white rounded-full font-medium hover:border-gray-400 dark:hover:border-white/50 hover:bg-gray-50 dark:hover:bg-white/10 transition-all duration-200 backdrop-blur-sm">
@@ -91,15 +59,12 @@
         Номууд үзэх
       </a>
     </div>
-    </div>
-
-    {{-- MARQUEE SECTION --}}
-    <div class="w-full mt-auto mb-8 overflow-hidden">
+    <div class="relative w-full mt-12 mb-8 overflow-hidden">
       {{-- Canvas Background --}}
       <canvas id="authors-canvas" class="absolute inset-0 w-full h-full pointer-events-none opacity-30"></canvas>
       
       {{-- Marquee Container --}}
-      <div class="flex flex-col gap-6 relative z-10 py-4 w-full marquee-fade-mask">
+      <div class="flex flex-col gap-6 relative z-10 py-4">
         
         {{-- Row 1: Left to Right (or Right to Left) --}}
         <div class="marquee-container flex overflow-hidden select-none">
@@ -120,15 +85,15 @@
         {{-- Row 2: Right to Left (or Left to Right) --}}
         <div class="marquee-container flex overflow-hidden select-none">
             <div class="marquee-content flex gap-6 animate-marquee-right">
-                @foreach($newBooks as $book)
-                   @include('components.book-pill', ['book' => $book])
+                @foreach($featuredAuthors as $author)
+                   @include('components.author-pill', ['author' => $author])
                 @endforeach
                  {{-- Duplicate --}}
-                @foreach($newBooks as $book)
-                   @include('components.book-pill', ['book' => $book])
+                @foreach($featuredAuthors as $author)
+                   @include('components.author-pill', ['author' => $author])
                 @endforeach
-                 @foreach($newBooks as $book)
-                   @include('components.book-pill', ['book' => $book])
+                 @foreach($featuredAuthors as $author)
+                   @include('components.author-pill', ['author' => $author])
                 @endforeach
             </div>
         </div>
@@ -136,11 +101,37 @@
       </div>
     </div>
 
-    {{-- End of Marquee --}}
+    {{-- Inline Component for Author Pill (to avoid creating file + duplicates) --}}
+    @once
+    @php
+        function renderAuthorPill($author) {
+            $img = \Illuminate\Support\Str::startsWith($author->profile_image ?? '', ['http', '/']) 
+                ? $author->profile_image 
+                : 'storage/' . ltrim($author->profile_image ?? '', '/');
+            
+            return '
+            <a href="'.route('authors.show', $author->slug ?? $author->id).'" 
+               class="flex items-center gap-3 bg-white/5 backdrop-blur-md border border-gray-200/20 dark:border-white/10 rounded-full px-2 py-2 pr-6 hover:bg-white/10 transition-colors shrink-0 min-w-[200px]">
+                <div class="w-10 h-10 rounded-full overflow-hidden border border-gray-100 dark:border-gray-700">
+                    <img src="'.asset($img).'" alt="'.$author->name.'" class="w-full h-full object-cover">
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-sm font-medium text-gray-800 dark:text-gray-100 whitespace-nowrap">'.$author->name.'</span>
+                     <span class="text-[10px] text-gray-500 dark:text-gray-400">'.$author->books_count.' Books</span>
+                </div>
+            </a>
+            ';
+        }
+    @endphp
+    @endonce
+    
+    {{-- Re-implement loop without php function for simpler blade syntax if preferred, but repeating HTML 6 times is messy. 
+         Let's just use a blade partial or standard loop. 
+    --}}
   </section>
 
   {{-- ================= FEATURED BOOKS ================= --}}
-  {{-- <section class="max-w-6xl mx-auto px-6 mt-24">
+  <section class="max-w-6xl mx-auto px-6 mt-24">
     <div class="flex justify-between items-end mb-6">
       <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Шилдэг үнэлгээтэй</h2>
       <a href="{{ route('book', ['sort' => 'rating']) }}" 
@@ -174,10 +165,10 @@
         <div class="col-span-full text-center py-12 text-slate-500">Одоогоор ном байхгүй байна.</div>
       @endif
     </div>
-  </section> --}}
+  </section>
 
   {{-- ================= NEW BOOKS ================= --}}
-  {{-- <section class="max-w-6xl mx-auto px-6 py-16 border-t border-gray-200 dark:border-white/20 relative z-10">
+  <section class="max-w-6xl mx-auto px-6 py-16 border-t border-gray-200 dark:border-white/20 relative z-10">
     <div class="flex justify-between items-center mb-12">
       <h2 class="text-2xl font-light text-gray-900 dark:text-white">Шинэ номууд</h2>
       <a href="{{ route('book') }}" 
@@ -227,11 +218,11 @@
         <div class="col-span-full text-center py-16 text-gray-500">Одоогоор ном байхгүй байна.</div>
       @endforelse
     </div>
-  </section> --}}
+  </section>
 
   {{-- ================= AUTHORS ================= --}}
-  {{-- <section class="max-w-6xl mx-auto px-6 py-16 border-t border-gray-200 dark:border-white/20 relative z-10">
-    <h2 class="text-2xl font-light text-gray-900 dark:text-white mb-12 text-center">Зохиолчид</h2> --}}
+  <section class="max-w-6xl mx-auto px-6 py-16 border-t border-gray-200 dark:border-white/20 relative z-10">
+    <h2 class="text-2xl font-light text-gray-900 dark:text-white mb-12 text-center">Зохиолчид</h2>
     
     {{-- <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
       @forelse($featuredAuthors as $author)
@@ -317,6 +308,55 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+    // === 1. ORBIT LAYOUT LOGIC ===
+    const orbitContainer = document.getElementById('authors-orbit');
+    if (orbitContainer) {
+        const items = orbitContainer.querySelectorAll('.orbit-item');
+        const count = items.length;
+        const radius = orbitContainer.offsetWidth / 2; // e.g. 225px
+        
+        // Distribute items in a circle
+        items.forEach((item, index) => {
+            const angle = (index / count) * 2 * Math.PI - (Math.PI / 2); // Start from top
+            // Calculate position relative to center (0,0)
+            // x = r * cos(a), y = r * sin(a)
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+            
+            // Apply translation. 
+            // Note: Items are absolute centered (top-1/2 left-1/2), so translate moves them from center.
+            item.style.transform = `translate(${x}px, ${y}px)`;
+        });
+
+        // Add slow rotation to container
+        let rotation = 0;
+        function rotateOrbit() {
+            rotation += 0.05; // speed
+            orbitContainer.style.transform = `rotate(${rotation}deg)`;
+            
+            // Counter-rotate items to keep images upright? 
+            // If we want them upright, we must rotate them -rotation.
+            items.forEach(item => {
+               // We need to preserve the translation!
+               // Current transform is just translate(x, y). 
+               // If we change it, we overwrite it.
+               // Better approach: Rotate the CONTAINER, and calculate item positions based on it?
+               // Actually, allow them to rotate (like a ferris wheel)? Images are round, so rotation is fine unless they have text inside.
+               // We moved text to tooltip (hover), so rotation is OK for images! 
+               // But let's keep them upright for better quality feel.
+               
+               // To keep items upright while parent rotates:
+               // item.style.transform = `translate(${x}px, ${y}px) rotate(${-rotation}deg)`;
+               // But we need x/y from closure.
+               
+               // Let's re-calculate or store x/y
+               // Actually, simpler: Don't rotate container. Just animate the angle in JS.
+            });
+            requestAnimationFrame(rotateOrbit);
+        }
+        // rotateOrbit(); // Uncomment to enable rotation
+    }
+
     // === 2. CANVAS CONSTELLATION LOGIC ===
     const canvas = document.getElementById('authors-canvas');
     if (!!canvas) {

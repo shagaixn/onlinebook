@@ -21,30 +21,22 @@
   /* Marquee Animations */
   @keyframes marquee-left {
     from { transform: translateX(0); }
-    to { transform: translateX(-33.33333%); } /* Move 1/3 because we have 3 sets */
+    to { transform: translateX(-50%); } /* Move half width because we duplicated content */
   }
   @keyframes marquee-right {
-    from { transform: translateX(-33.33333%); } 
+    from { transform: translateX(-50%); } 
     to { transform: translateX(0); }
   }
 
   .animate-marquee-left {
-    animation: marquee-left 45s linear infinite;
-    will-change: transform;
+    animation: marquee-left 40s linear infinite;
   }
   .animate-marquee-right {
-    animation: marquee-right 50s linear infinite; /* Slightly different speed for visual interest */
-    will-change: transform;
+    animation: marquee-right 40s linear infinite;
   }
-  /* Pause on hover with smooth transition if possible (CSS pause is instant) */
-  .marquee-content:hover {
+  /* Pause on hover */
+  .marquee-container:hover .marquee-content {
       animation-play-state: paused;
-  }
-  
-  /* Gradient Mask for fading edges */
-  .marquee-fade-mask {
-    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
   }
 </style>
 
@@ -54,16 +46,13 @@
   $isAuthenticated = $currentUser !== null;
 @endphp
 
-<main class="night-sky min-h-[100svh] w-full relative">
+<main class="night-sky min-h-[100svh] max-w-9xl mx-auto px-4 py-15">
 
   {{-- ================= HERO ================= --}}
-  <section class="w-full min-h-[100svh] flex flex-col justify-center items-center px-4 relative z-10 overflow-hidden">
-    <section id="hero" class="absolute inset-0 w-full h-full -z-10">
-      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent dark:via-white/5"></div>
-      {{-- Optional: Add background image or pattern here if needed covering full screen --}}
-    </section>
+  <section class="max-w-4xl mx-auto px-6 pt-32 pb-24 text-center relative z-10">
+    <section id="hero" class="relative overflow-hidden">
+      <div class="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-white/5 to-transparent dark:via-white/5 rounded-3xl"></div>
     
-    <div class="w-full max-w-4xl mx-auto text-center pt-20">
     <h1 class="text-4xl md:text-6xl font-light tracking-tight text-gray-900 dark:text-white mb-6">
       Мэдлэгийн<br>
       <span class="font-medium bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">Шинэ ертөнц</span>
@@ -73,7 +62,7 @@
       Цифр номын сан - хүссэн цагтаа, хүссэн газартаа
     </p>
 
-    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
       @if($isAuthenticated)
         <a href="{{ route('subscription') }}" 
            class="px-8 py-3  border border-gray-300 dark:border-white/30 text-gray-700 dark:text-white rounded-full font-medium hover:border-gray-400 dark:hover:border-white/50 hover:bg-gray-50 dark:hover:bg-white/10 transition-all duration-200 backdrop-blur-sm">
@@ -91,15 +80,12 @@
         Номууд үзэх
       </a>
     </div>
-    </div>
-
-    {{-- MARQUEE SECTION --}}
-    <div class="w-full mt-auto mb-8 overflow-hidden">
+    <div class="relative w-full mt-12 mb-8 overflow-hidden">
       {{-- Canvas Background --}}
       <canvas id="authors-canvas" class="absolute inset-0 w-full h-full pointer-events-none opacity-30"></canvas>
       
       {{-- Marquee Container --}}
-      <div class="flex flex-col gap-6 relative z-10 py-4 w-full marquee-fade-mask">
+      <div class="flex flex-col gap-6 relative z-10 py-4">
         
         {{-- Row 1: Left to Right (or Right to Left) --}}
         <div class="marquee-container flex overflow-hidden select-none">
