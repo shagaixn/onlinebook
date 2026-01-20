@@ -35,8 +35,20 @@ class CategoryController extends Controller
            }
        }
        
-       // Get books in this category (from both single and many-to-many relationships)
-       $books = $category->books()->with(['authorModel'])->paginate(15);
+       // Get IDs from many-to-many relationship
+       $manyToManyBookIds = $category->books()->pluck('books.id');
+       
+       // Get IDs from single category_id relationship (backward compatibility)
+       $singleCategoryBookIds = $category->booksWithSingleCategory()->pluck('id');
+       
+       // Merge and get unique IDs
+       $allBookIds = $manyToManyBookIds->merge($singleCategoryBookIds)->unique();
+       
+       // Query books by IDs and paginate at database level
+       $books = \App\Models\Book::whereIn('id', $allBookIds)
+           ->with(['authorModel', 'categoryModel'])
+           ->orderBy('created_at', 'desc')
+           ->paginate(15);
 
        return view('categories.show', compact('category', 'books'));
    }
