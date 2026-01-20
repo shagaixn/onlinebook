@@ -44,7 +44,7 @@
     <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
       @if($isAuthenticated)
         <a href="{{ route('subscription') }}" 
-           class="px-8 py-3  border border-gray-300 dark:border-white/30 text-gray-700 dark:text-white rounded-full font-medium hover:border-gray-400 dark:hover:border-white/50 hover:bg-gray-50 dark:hover:bg-white/10 transition-all duration-200 backdrop-blur-sm">
+           class="px-8 py-3 bg-white dark:bg-white text-white dark:text-gray-900 rounded-full font-medium hover:bg-gray-800  transition-all duration-200 shadow-lg dark:shadow-xl">
           Subscription
         </a>
       @else

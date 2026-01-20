@@ -30,36 +30,36 @@
   {{-- ================= HERO ================= --}}
   <section class="max-w-4xl mx-auto px-6 pt-32 pb-24 text-center relative z-10">
     <section id="hero" class="relative overflow-hidden">
-  <div class="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-white/5 to-transparent dark:via-white/5 rounded-3xl"></div>
-    
-    <h1 class="text-4xl md:text-6xl font-light tracking-tight text-gray-900 dark:text-white mb-6">
-      Мэдлэгийн<br>
-      <span class="font-medium bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">Шинэ ертөнц</span>
-    </h1>
+  <div id="hero-bg" class="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-white/5 to-transparent dark:via-white/5 rounded-3xl"></div>
 
-    <p class="text-lg text-gray-600 dark:text-gray-300 max-w-lg mx-auto mb-12 leading-relaxed">
-      Цифр номын сан - хүссэн цагтаа, хүссэн газартаа
-    </p>
+  <h1 id="hero-title" class="text-4xl md:text-6xl font-light tracking-tight text-gray-900 dark:text-white mb-6" data-animate="stagger">
+    Мэд��эгийн<br>
+    <span class="font-medium bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">Шинэ ертөнц</span>
+  </h1>
 
-    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-      @if($isAuthenticated)
-        <a href="{{ route('subscription') }}" 
-           class="px-8 py-3  border border-gray-300 dark:border-white/30 text-gray-700 dark:text-white rounded-full font-medium hover:border-gray-400 dark:hover:border-white/50 hover:bg-gray-50 dark:hover:bg-white/10 transition-all duration-200 backdrop-blur-sm">
-          Subscription
-        </a>
-      @else
-        <a href="{{ route('login') }}" 
-           class="px-8 py-3  border border-gray-300 dark:border-white/30 text-gray-700 dark:text-white rounded-full font-medium hover:border-gray-400 dark:hover:border-white/50 hover:bg-gray-50 dark:hover:bg-white/10 transition-all duration-200 backdrop-blur-sm">
-          Нэвтрэх
-        </a>
-      @endif
-      
-      <a href="{{ route('book') }}" 
-         class="px-8 py-3  border border-gray-300 dark:border-white/30 text-gray-700 dark:text-white rounded-full font-medium hover:border-gray-400 dark:hover:border-white/50 hover:bg-gray-50 dark:hover:bg-white/10 transition-all duration-200 backdrop-blur-sm">
-        Номууд үзэх
+  <p id="hero-subtitle" class="text-lg text-gray-600 dark:text-gray-300 max-w-lg mx-auto mb-12 leading-relaxed" data-animate="reveal">
+    Цифр номын сан - хүссэн цагтаа, хүссэн газартаа
+  </p>
+
+  <div class="flex flex-col sm:flex-row gap-4 justify-center items-center" data-animate="reveal">
+    @if($isAuthenticated)
+      <a href="{{ route('subscription') }}"
+         class="px-8 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-full font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-all duration-200 shadow-lg dark:shadow-xl">
+        Subscription
       </a>
-    </div>
-  </section>
+    @else
+      <a href="{{ route('login') }}"
+         class="px-8 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-full font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-all duration-200 shadow-lg dark:shadow-xl">
+        Нэвтрэх
+      </a>
+    @endif
+
+    <a href="{{ route('book') }}"
+       class="px-8 py-3 border border-gray-300 dark:border-white/30 text-gray-700 dark:text-white rounded-full font-medium hover:border-gray-400 dark:hover:border-white/50 hover:bg-gray-50 dark:hover:bg-white/10 transition-all duration-200 backdrop-blur-sm">
+      Номууд үзэх
+    </a>
+  </div>
+</section>
 
   {{-- ================= FEATURED BOOKS ================= --}}
   <section class="max-w-6xl mx-auto px-6 mt-24">

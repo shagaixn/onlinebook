@@ -30,7 +30,7 @@
   {{-- ================= HERO ================= --}}
   <section class="max-w-4xl mx-auto px-6 pt-32 pb-24 text-center relative z-10">
     <section id="hero" class="relative overflow-hidden">
-  <div class="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-white/5 to-transparent dark:via-white/5 rounded-3xl"></div>
+  <div class="absolute inset-0 -z-10 bg-gradient-to-b from-transparent  rounded-3xl"></div>
     
     <h1 class="text-4xl md:text-6xl font-light tracking-tight text-gray-900 dark:text-white mb-6">
       Мэдлэгийн<br>
@@ -44,7 +44,7 @@
     <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
       @if($isAuthenticated)
         <a href="{{ route('subscription') }}" 
-           class="px-8 py-3  border border-gray-300 dark:border-white/30 text-gray-700 dark:text-white rounded-full font-medium hover:border-gray-400 dark:hover:border-white/50 hover:bg-gray-50 dark:hover:bg-white/10 transition-all duration-200 backdrop-blur-sm">
+           class="px-8 py-3 bg-white dark:bg-white text-white dark:text-gray-900 rounded-full font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-all duration-200 shadow-lg dark:shadow-xl">
           Subscription
         </a>
       @else

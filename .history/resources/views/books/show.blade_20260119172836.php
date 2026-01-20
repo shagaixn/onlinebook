@@ -37,11 +37,11 @@
       </div>
       <div class="mt-2 flex flex-wrap gap-3">
         <a href="{{ route('books.read', $book->id) }}" aria-label="Унших"
-           class="mb-4 text-gray-700 dark:text-gray-300 px-8 py-3 rounded-full shadow-md hover:from-blue-600 hover:to-indigo-700 transition font-semibold text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ">
+           class="bg-gradient-to-r from-blue-500 to-indigo-600 text-dark  px-8 py-3 rounded-full shadow-md hover:from-blue-600 hover:to-indigo-700 transition font-semibold text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ">
           Унших
         </a>
         <button aria-label="Худалдан авах"
-                class="mb-4 text-gray-700 dark:text-gray-300 px-8 py-3 rounded-full shadow-md hover:from-blue-600 hover:to-indigo-700 transition font-semibold text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                class="bg-gradient-to-r from-blue-500 to-indigo-600  dark:text-gray-300 px-8 py-3 rounded-full shadow-md hover:from-blue-600 hover:to-indigo-700 transition font-semibold text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
           Худалдан авах
         </button>
 
