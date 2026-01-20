@@ -1,17 +1,32 @@
-# Таны өөрийн PHP кодыг зөв ангилуулах
-*.php linguist-language=PHP
-*.blade.php linguist-language=Blade
+# 1) Мөрийн төгсгөл
+*               text=auto eol=lf
 
-# Гуравдагч талын багцуудыг статистикаас хасна
-vendor/** linguist-vendored
-node_modules/** linguist-vendored
+# 2) Diff driver-ууд (ухаалаг hunk header)
+*.blade.php     diff=html
+*.css           diff=css
+*.html          diff=html
+*.md            diff=markdown
+*.php           diff=php
+
+# 3) GitHub Linguist — хэлний статистик болон дуу чимээг багасгах
+vendor/**               linguist-vendored
+node_modules/**         linguist-vendored
 
 # Үүсгэсэн build/cached файлуудыг статистикаас хасна
-public/** linguist-generated
-dist/** linguist-generated
-storage/framework/** linguist-generated
-bootstrap/cache/** linguist-generated
+public/**               linguist-generated
+dist/**                 linguist-generated
+storage/framework/**    linguist-generated
+bootstrap/cache/**      linguist-generated
 
-# Хэрэв санамсаргүйгээр Hack файл орсон бол PHP гэж тооцмоор бол (сонголтоор)
-*.hack linguist-language=PHP
-*.hhi linguist-language=PHP
+# Хэлний override-ууд
+*.php                   linguist-language=PHP
+*.blade.php             linguist-language=Blade
+
+# (Хэрэв Hack файл огт байхгүй бол эдгээрийг үлдээх шаардлагагүй)
+# *.hack                linguist-language=PHP
+# *.hhi                 linguist-language=PHP
+
+# 4) Архивлах үед хасах зүйлс (release багц цэвэр байлгах)
+/.github                 export-ignore
+CHANGELOG.md            export-ignore
+.styleci.yml            export-ignore
