@@ -99,7 +99,8 @@ class AuthorController extends Controller
     public function publicShow(string $slug)
     {
         $author = Author::where('slug', $slug)->firstOrFail();
-        return view('authors.show', compact('author'));
+        $books = $author->books()->with(['categoryModel'])->get();
+        return view('authors.show', compact('author', 'books'));
     }
 
     public function edit($id)

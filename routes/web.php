@@ -48,6 +48,10 @@ Route::get('/authors', [HomeController::class, 'authors'])->name('authors.index'
 // Single author (public) - this must come after the /authors list route
 Route::get('/authors/{slug}', [AuthorController::class, 'publicShow'])->name('authors.show');
 
+// Categories (public)
+Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index'])->name('categories.index');
+Route::get('/categories/{slugOrId}', [\App\Http\Controllers\CategoryController::class, 'show'])->name('categories.show');
+
 // Auth / profile
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');

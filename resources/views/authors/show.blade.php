@@ -206,6 +206,39 @@
               </div>
             </div>
           @endif
+          
+          {{-- Books by this author --}}
+          @if(isset($books) && $books->count() > 0)
+            <div>
+              <h2 class="text-base font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                <span>📖</span> Бүтээлүүд
+              </h2>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
+                @foreach($books as $book)
+                  <a href="{{ route('books.show', $book->id) }}" class="block p-4 bg-dark dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition">
+                    <div class="flex gap-3">
+                      @if($book->cover_image)
+                        <img src="{{ asset('storage/' . $book->cover_image) }}" alt="{{ $book->title }}" class="w-16 h-20 object-cover rounded">
+                      @else
+                        <div class="w-16 h-20 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 rounded flex items-center justify-center">
+                          <span class="text-2xl">📚</span>
+                        </div>
+                      @endif
+                      <div class="flex-1">
+                        <h3 class="font-semibold text-slate-900 dark:text-white mb-1">{{ $book->title }}</h3>
+                        @if($book->categoryModel)
+                          <p class="text-xs text-slate-500 dark:text-slate-400">{{ $book->categoryModel->name }}</p>
+                        @endif
+                        @if($book->published_date)
+                          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ $book->published_date->format('Y') }}</p>
+                        @endif
+                      </div>
+                    </div>
+                  </a>
+                @endforeach
+              </div>
+            </div>
+          @endif
         </div>
         {{-- Sidebar --}}
         <div class="flex flex-col space-y-6">

@@ -35,9 +35,28 @@ class CategoryController extends Controller
            }
        }
        
-       // Get books in this category (from both single and many-to-many relationships)
-       $books = $category->books()->with(['authorModel'])->paginate(15);
+       // Get books from many-to-many relationship
+       $manyToManyBooks = $category->books()->with(['authorModel'])->get();
+       
+       // Get books from single category_id relationship (backward compatibility)
+       $singleCategoryBooks = $category->booksWithSingleCategory()->with(['authorModel'])->get();
+       
+       // Merge and remove duplicates based on book id
+       $allBooks = $manyToManyBooks->merge($singleCategoryBooks)->unique('id')->sortByDesc('created_at');
+       
+       // Manually paginate the merged collection
+       $perPage = 15;
+       $currentPage = request()->get('page', 1);
+       $offset = ($currentPage - 1) * $perPage;
+       
+       $paginatedBooks = new \Illuminate\Pagination\LengthAwarePaginator(
+           $allBooks->slice($offset, $perPage)->values(),
+           $allBooks->count(),
+           $perPage,
+           $currentPage,
+           ['path' => request()->url(), 'query' => request()->query()]
+       );
 
-       return view('categories.show', compact('category', 'books'));
+       return view('categories.show', compact('category', 'paginatedBooks'))->with('books', $paginatedBooks);
    }
 }

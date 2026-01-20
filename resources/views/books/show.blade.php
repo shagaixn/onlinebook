@@ -17,7 +17,14 @@
   <div class="md:w-1/2 p-8 flex flex-col justify-center transition-colors duration-300">
   <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white mb-2 drop-shadow-sm">{{ $book->title }}</h2>
       <p class="text-gray-700 dark:text-gray-300 font-medium mb-2">
-        Зохиолч: <span class="font-semibold text-blue-600 dark:text-blue-300">{{ $book->author ?? '-' }}</span>
+        Зохиолч: 
+        @if($book->authorModel && $book->authorModel->slug)
+          <a href="{{ route('authors.show', $book->authorModel->slug) }}" class="font-semibold text-blue-600 dark:text-blue-300 hover:underline">
+            {{ $book->author_display }}
+          </a>
+        @else
+          <span class="font-semibold text-blue-600 dark:text-blue-300">{{ $book->author_display ?? '-' }}</span>
+        @endif
       </p>
       <p class="text-gray-700 dark:text-gray-300 font-medium mb-2">
         Хэвлэгдсэн огноо: 
@@ -33,7 +40,13 @@
       </div>
       <div class="mb-4 text-gray-700 dark:text-gray-300">
         <span class="font-semibold">Ангилал:</span>
-        {{ $category ? $category->name : '-' }}
+        @if($category)
+          <a href="{{ route('categories.show', $category->slug ?? $category->id) }}" class="text-blue-600 dark:text-blue-300 hover:underline">
+            {{ $category->name }}
+          </a>
+        @else
+          <span>-</span>
+        @endif
       </div>
       <div class="mt-2 flex flex-wrap gap-3">
         <a href="{{ route('books.read', $book->id) }}" aria-label="Унших"
