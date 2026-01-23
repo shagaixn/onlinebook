@@ -101,7 +101,9 @@
     </div>
 
    <form method="GET" action="{{ route('authors.index') }}" class="mb-8 flex justify-center gap-3">
-
+        <input type="text" name="q" value="{{ request('q') }}" placeholder="Нэр, үндэс эсвэл намтраар хайх..."
+              class="w-full max-w-md px-5 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm" />
+        <button type="submit" class="px-6 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition shadow-sm font-medium">Хайх</button>
     </form>
 
     @if($authors->count() === 0)

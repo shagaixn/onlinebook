@@ -239,7 +239,6 @@
               </div>
             </div>
           @endif
-          
         </div>
         {{-- Sidebar --}}
         <div class="flex flex-col space-y-6">

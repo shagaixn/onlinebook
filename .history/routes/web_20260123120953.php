@@ -26,7 +26,6 @@ Route::get('login/{provider}/callback', [SocialController::class, 'handleProvide
 // Public
 Route::get('/home', [HomeController::class, 'home'])->name('home');
 Route::get('/book', [HomeController::class, 'book'])->name('book');
-Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/service', [HomeController::class, 'service'])->name('service');
 Route::get('/podcast', function () {
     return view('pages.podcast');

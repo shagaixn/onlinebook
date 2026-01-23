@@ -23,9 +23,7 @@
             {{ $book->author_display }}
           </a>
         @else
-          <span class="font-semibold text-gray-600 dark:text-gray-400">
-            {{ $book->author_display ?? 'Зохиолчийн мэдээлэл байхгүй байна' }}
-          </span>
+          <span class="font-semibold text-blue-600 dark:text-blue-300">{{ $book->author_display ?? '-' }}</span>
         @endif
       </p>
       <p class="text-gray-700 dark:text-gray-300 font-medium mb-2">
@@ -42,7 +40,7 @@
       </div>
       <div class="mb-4 text-gray-700 dark:text-gray-300">
         <span class="font-semibold">Ангилал:</span>
-        {{ $category ? $category->name : '-' }}
+    
       </div>
       <div class="mt-2 flex flex-wrap gap-3">
         <a href="{{ route('books.read', $book->id) }}" aria-label="Унших"

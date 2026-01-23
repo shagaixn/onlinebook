@@ -11,6 +11,7 @@ use App\Http\Controllers\SocialController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,7 +27,8 @@ Route::get('login/{provider}/callback', [SocialController::class, 'handleProvide
 // Public
 Route::get('/home', [HomeController::class, 'home'])->name('home');
 Route::get('/book', [HomeController::class, 'book'])->name('book');
-Route::get('/about', [HomeController::class, 'about'])->name('about');
+Route::get('/subscription', [HomeController::class, 'subscription'])->name('subscription');
+Route::post('/subscription/pay', [App\Http\Controllers\SubscriptionController::class, 'pay'])->name('subscription.pay');
 Route::get('/service', [HomeController::class, 'service'])->name('service');
 Route::get('/podcast', function () {
     return view('pages.podcast');
@@ -45,6 +47,10 @@ Route::get('/books/{id}', [BookController::class, 'show'])->name('books.show');
 Route::get('/authors', [HomeController::class, 'authors'])->name('authors.index');
 // Single author (public) - this must come after the /authors list route
 Route::get('/authors/{slug}', [AuthorController::class, 'publicShow'])->name('authors.show');
+
+// Categories (public)
+Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index'])->name('categories.index');
+Route::get('/categories/{slugOrId}', [\App\Http\Controllers\CategoryController::class, 'show'])->name('categories.show');
 
 
 // Auth / profile

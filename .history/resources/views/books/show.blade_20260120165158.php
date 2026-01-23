@@ -17,15 +17,13 @@
   <div class="md:w-1/2 p-8 flex flex-col justify-center transition-colors duration-300">
   <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white mb-2 drop-shadow-sm">{{ $book->title }}</h2>
       <p class="text-gray-700 dark:text-gray-300 font-medium mb-2">
-        Зохиолч: 
+         Зохиолч: 
         @if($book->authorModel && $book->authorModel->slug)
           <a href="{{ route('authors.show', $book->authorModel->slug) }}" class="font-semibold text-blue-600 dark:text-blue-300 hover:underline">
             {{ $book->author_display }}
           </a>
         @else
-          <span class="font-semibold text-gray-600 dark:text-gray-400">
-            {{ $book->author_display ?? 'Зохиолчийн мэдээлэл байхгүй байна' }}
-          </span>
+          <span class="font-semibold text-blue-600 dark:text-blue-300">{{ $book->author_display ?? '-' }}</span>
         @endif
       </p>
       <p class="text-gray-700 dark:text-gray-300 font-medium mb-2">

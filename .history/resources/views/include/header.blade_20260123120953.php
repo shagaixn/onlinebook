@@ -132,11 +132,9 @@
             <div class="hidden md:flex items-center gap-1 text-sm font-semibold text-slate-700 dark:text-slate-200">
               <a href="{{ route('home') }}" class="px-3 py-1.5 rounded-full hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-slate-800 dark:hover:text-blue-400 {{ request()->routeIs('home') ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-slate-800' : '' }}">Танд зориулав</a>
               <a href="{{ route('book') }}" class="px-3 py-1.5 rounded-full hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-slate-800 dark:hover:text-blue-400 {{ request()->routeIs('book') ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-slate-800' : '' }}">Ном</a>
-              <a href="{{ route('manga') }}" class="px-3 py-1.5 rounded-full hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-slate-800 dark:hover:text-blue-400 {{ request()->routeIs('manga') ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-slate-800' : '' }}">Manga</a>
-              
               <a href="{{ route('authors.index') }}" class="px-3 py-1.5 rounded-full hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-slate-800 dark:hover:text-blue-400 {{ request()->routeIs('authors.index') ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-slate-800' : '' }}">Зохиолчид</a>
               <a href="{{ route('podcast') }}" class="px-3 py-1.5 rounded-full hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-slate-800 dark:hover:text-blue-400 {{ request()->routeIs('podcast') ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-slate-800' : '' }}">Podcast</a>
-              <a href="{{ route('about') }}" class="px-3 py-1.5 rounded-full hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-slate-800 dark:hover:text-blue-400 {{ request()->routeIs('about') ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-slate-800' : '' }}">Бидний тухай</a>
+              <a href="{{ route('manga') }}" class="px-3 py-1.5 rounded-full hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-slate-800 dark:hover:text-blue-400 {{ request()->routeIs('manga') ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-slate-800' : '' }}">Manga</a>
             </div>
           </div>
 
@@ -211,7 +209,6 @@
             <div class="flex flex-wrap items-center justify-center gap-3 text-base font-semibold text-slate-800 dark:text-slate-100">
               <a href="{{ route('home') }}" class="px-4 py-2 rounded-full hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-slate-800 dark:hover:text-blue-400 {{ request()->routeIs('home') ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-slate-800' : '' }}">Танд зориулав</a>
               <a href="{{ route('book') }}" class="px-4 py-2 rounded-full hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-slate-800 dark:hover:text-blue-400 {{ request()->routeIs('book') ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-slate-800' : '' }}">Ном</a>
-              <a href="{{ route('about') }}" class="px-4 py-2 rounded-full hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-slate-800 dark:hover:text-blue-400 {{ request()->routeIs('about') ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-slate-800' : '' }}">Бидний тухай</a>
               <a href="{{ route('authors.index') }}" class="px-4 py-2 rounded-full hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-slate-800 dark:hover:text-blue-400 {{ request()->routeIs('authors.index') ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-slate-800' : '' }}">Зохиолчид</a>
               <a href="{{ route('podcast') }}" class="px-4 py-2 rounded-full hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-slate-800 dark:hover:text-blue-400 {{ request()->routeIs('podcast') ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-slate-800' : '' }}">Podcast</a>
               <a href="{{ route('manga') }}" class="px-4 py-2 rounded-full hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-slate-800 dark:hover:text-blue-400 {{ request()->routeIs('manga') ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-slate-800' : '' }}">Manga</a>

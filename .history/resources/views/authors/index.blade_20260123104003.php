@@ -101,7 +101,7 @@
     </div>
 
    <form method="GET" action="{{ route('authors.index') }}" class="mb-8 flex justify-center gap-3">
-
+       lue-600 text-white hover:bg-blue-700 transition shadow-sm font-medium">Хайх</button>
     </form>
 
     @if($authors->count() === 0)

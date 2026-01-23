@@ -36,13 +36,9 @@
     animation: marquee-right 50s linear infinite; /* Slightly different speed for visual interest */
     will-change: transform;
   }
-  /* Smooth cursor transitions */
-  .marquee-container {
-    cursor: grab;
-    user-select: none;
-  }
-  .marquee-container:active {
-    cursor: grabbing;
+  /* Pause on hover with smooth transition if possible (CSS pause is instant) */
+  .marquee-content:hover {
+      animation-play-state: paused;
   }
   
   /* Gradient Mask for fading edges */

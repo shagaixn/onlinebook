@@ -36,13 +36,9 @@
     animation: marquee-right 50s linear infinite; /* Slightly different speed for visual interest */
     will-change: transform;
   }
-  /* Smooth cursor transitions */
-  .marquee-container {
-    cursor: grab;
-    user-select: none;
-  }
-  .marquee-container:active {
-    cursor: grabbing;
+  /* Pause on hover with smooth transition if possible (CSS pause is instant) */
+  .marquee-content:hover {
+      animation-play-state: paused;
   }
   
   /* Gradient Mask for fading edges */
@@ -138,9 +134,6 @@
 
     {{-- End of Marquee --}}
   </section>
-  <div>
-
-  </div>
 
   {{-- ================= FEATURED BOOKS ================= --}}
   {{-- <section class="max-w-6xl mx-auto px-6 mt-24">
@@ -320,91 +313,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // === 1. DRAG TO SCROLL FOR MARQUEE ROWS ===
-    const marqueeContainers = document.querySelectorAll('.marquee-container');
-    
-    marqueeContainers.forEach(container => {
-        const content = container.querySelector('.marquee-content');
-        if (!content) return;
-        
-        let isDown = false;
-        let startX;
-        let scrollLeft;
-        let isPaused = false;
-
-        // Store original animation state
-        const originalAnimation = window.getComputedStyle(content).animation;
-
-        container.style.cursor = 'grab';
-
-        container.addEventListener('mousedown', (e) => {
-            isDown = true;
-            isPaused = true;
-            container.style.cursor = 'grabbing';
-            
-            // Pause animation
-            content.style.animationPlayState = 'paused';
-            
-            startX = e.pageX - container.offsetLeft;
-            scrollLeft = container.scrollLeft;
-            
-            // Prevent text selection
-            e.preventDefault();
-        });
-
-        container.addEventListener('mouseleave', () => {
-            if (isDown) {
-                isDown = false;
-                container.style.cursor = 'grab';
-                
-                // Resume animation after a short delay
-                setTimeout(() => {
-                    if (isPaused) {
-                        content.style.animationPlayState = 'running';
-                        isPaused = false;
-                    }
-                }, 500);
-            }
-        });
-
-        container.addEventListener('mouseup', () => {
-            if (isDown) {
-                isDown = false;
-                container.style.cursor = 'grab';
-                
-                // Resume animation after a short delay
-                setTimeout(() => {
-                    if (isPaused) {
-                        content.style.animationPlayState = 'running';
-                        isPaused = false;
-                    }
-                }, 500);
-            }
-        });
-
-        container.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            
-            const x = e.pageX - container.offsetLeft;
-            const walk = (x - startX) * 2; // Scroll speed multiplier
-            container.scrollLeft = scrollLeft - walk;
-        });
-
-        // Also pause on hover (existing functionality)
-        container.addEventListener('mouseenter', () => {
-            if (!isDown) {
-                content.style.animationPlayState = 'paused';
-            }
-        });
-
-        container.addEventListener('mouseleave', () => {
-            if (!isDown && !isPaused) {
-                content.style.animationPlayState = 'running';
-            }
-        });
-    });
-
     // === 2. CANVAS CONSTELLATION LOGIC ===
     const canvas = document.getElementById('authors-canvas');
     if (!!canvas) {

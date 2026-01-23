@@ -23,9 +23,7 @@
             {{ $book->author_display }}
           </a>
         @else
-          <span class="font-semibold text-gray-600 dark:text-gray-400">
-            {{ $book->author_display ?? 'Зохиолчийн мэдээлэл байхгүй байна' }}
-          </span>
+          <span class="font-semibold text-blue-600 dark:text-blue-300">{{ $book->author_display ?? '-' }}</span>
         @endif
       </p>
       <p class="text-gray-700 dark:text-gray-300 font-medium mb-2">

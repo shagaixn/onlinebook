@@ -159,11 +159,6 @@ class HomeController extends Controller
     return view('pages.service');
     }
 
-    public function about()
-    {
-        return view('pages.about');
-    }
-
     /**
      * Show the form for creating a new resource.
      */
