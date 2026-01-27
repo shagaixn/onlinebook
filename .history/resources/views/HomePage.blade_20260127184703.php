@@ -70,6 +70,7 @@
     <div class="w-full max-w-4xl mx-auto text-center pt-20">
     <h1 class="text-4xl md:text-6xl font-light tracking-tight text-gray-900 dark:text-white mb-6">
       Мэдлэг<br>
+      <span class="font-medium bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent"></span>
     </h1>
 
     <p class="text-lg text-gray-600 dark:text-gray-300 max-w-lg mx-auto mb-12 leading-relaxed">

@@ -34,6 +34,9 @@
           {{ $book->published_date ? \Carbon\Carbon::parse($book->published_date)->format('Y-m-d') : '-' }}
         </span>
       </p>
+      <div class="flex items-center gap-6 mb-4">
+        <span class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full font-semibold text-lg shadow-sm">{{ $book->duration ?? '-' }}</span>
+      </div>
       <div class="mb-4 text-gray-700 dark:text-gray-300">
         <span class="font-semibold">Ангилал:</span>
         {{ $category ? $category->name : '-' }}
