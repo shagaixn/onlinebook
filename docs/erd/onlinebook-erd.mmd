@@ -1,0 +1,104 @@
+erDiagram
+    %% OnlineBook Database Schema ERD
+    %% Generated from Laravel migrations
+    
+    %% Core Application Tables
+    
+    authors {
+        bigint id PK "Primary Key"
+        string name "Зохиолчийн нэр"
+        string slug UK "URL-friendly identifier"
+        string email UK "nullable"
+        string nationality "nullable"
+        string birth_place "nullable"
+        date birth_date "nullable"
+        date death_date "nullable"
+        string profile_image "nullable"
+        text notable_works "nullable"
+        text biography "nullable"
+        timestamp deleted_at "nullable - soft deletes"
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    books {
+        bigint id PK "Primary Key"
+        bigint author_id "nullable - logical FK to authors (not enforced)"
+        string title "Номын гарчиг"
+        string category "nullable"
+        string cover_image "nullable"
+        date published_date "nullable"
+        integer price "default 0"
+        integer pages "nullable"
+        longtext description "nullable"
+        string author "nullable - snapshot of author name"
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    users {
+        bigint id PK "Primary Key"
+        string name "Хэрэглэгчийн нэр"
+        string email UK
+        timestamp email_verified_at "nullable"
+        string password "nullable - for social login"
+        string remember_token "nullable"
+        string role "default user"
+        string provider "nullable - social login provider"
+        string provider_id "nullable - social login ID"
+        bigint last_read_book_id FK "nullable - FK to books.id"
+        timestamp last_read_at "nullable"
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    %% System Tables
+    
+    settings {
+        bigint id PK "Primary Key"
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    jobs {
+        bigint id PK "Primary Key"
+        string queue "indexed"
+        longtext payload
+        tinyint attempts
+        integer reserved_at "nullable"
+        integer available_at
+        integer created_at
+    }
+    
+    job_batches {
+        string id PK "Primary Key"
+        string name
+        integer total_jobs
+        integer pending_jobs
+        integer failed_jobs
+        longtext failed_job_ids
+        mediumtext options "nullable"
+        integer cancelled_at "nullable"
+        integer created_at
+        integer finished_at "nullable"
+    }
+    
+    failed_jobs {
+        bigint id PK "Primary Key"
+        string uuid UK
+        text connection
+        text queue
+        longtext payload
+        longtext exception
+        timestamp failed_at
+    }
+    
+    %% Relationships
+    
+    %% authors (1) to books (N) - Logical relationship, FK not enforced in database
+    %% Note: books.author_id references authors.id but no foreign key constraint exists
+    authors ||--o{ books : "author_id (logical, not enforced)"
+    
+    %% users (0..1) to books - Last read book tracking
+    %% Note: users.last_read_book_id has actual FK constraint with ON DELETE SET NULL
+    users }o--|| books : "last_read_book_id (FK enforced, on delete set null)"
