@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1400" height="1600" viewBox="0 0 1400 1600">
+  <defs>
+    <style>
+      .entity-box { fill: #ffffff; stroke: #333333; stroke-width: 2; }
+      .entity-header { fill: #4a90e2; stroke: none; }
+      .entity-title { fill: #ffffff; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; }
+      .entity-subtitle { fill: #e8f4ff; font-family: Arial, sans-serif; font-size: 12px; font-style: italic; }
+      .field-text { fill: #333333; font-family: 'Courier New', monospace; font-size: 11px; }
+      .field-key { fill: #e74c3c; font-weight: bold; }
+      .field-type { fill: #27ae60; }
+      .field-note { fill: #7f8c8d; font-style: italic; }
+      .relationship-line { stroke: #666666; stroke-width: 2; fill: none; }
+      .relationship-label { fill: #555555; font-family: Arial, sans-serif; font-size: 10px; }
+      .section-title { fill: #2c3e50; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; }
+    </style>
+  </defs>
+  
+  <!-- Title -->
+  <text x="700" y="30" text-anchor="middle" style="font-family: Arial, sans-serif; font-size: 24px; font-weight: bold; fill: #2c3e50;">
+    OnlineBook Database Schema
+  </text>
+  <text x="700" y="55" text-anchor="middle" style="font-family: Arial, sans-serif; font-size: 14px; fill: #7f8c8d;">
+    Entity Relationship Diagram
+  </text>
+  
+  <!-- Section: Core Application Tables -->
+  <text x="50" y="100" class="section-title">Core Application Tables</text>
+  
+  <!-- AUTHORS Entity -->
+  <g id="authors-entity" transform="translate(50, 120)">
+    <rect class="entity-box" width="380" height="420"/>
+    <rect class="entity-header" width="380" height="50"/>
+    <text x="190" y="25" text-anchor="middle" class="entity-title">AUTHORS</text>
+    <text x="190" y="42" text-anchor="middle" class="entity-subtitle">Зохиолч</text>
+    
+    <text x="10" y="75" class="field-text"><tspan class="field-key">🔑 id</tspan> <tspan class="field-type">bigint</tspan> <tspan class="field-note">PK</tspan></text>
+    <text x="10" y="95" class="field-text"><tspan class="field-key">🔒 name</tspan> <tspan class="field-type">string</tspan> <tspan class="field-note">Зохиолчийн нэр</tspan></text>
+    <text x="10" y="115" class="field-text"><tspan class="field-key">🔒 slug</tspan> <tspan class="field-type">string</tspan> <tspan class="field-note">UNIQUE, URL-friendly</tspan></text>
+    <text x="10" y="135" class="field-text">email <tspan class="field-type">string</tspan> <tspan class="field-note">UNIQUE, nullable</tspan></text>
+    <text x="10" y="155" class="field-text">nationality <tspan class="field-type">string</tspan> <tspan class="field-note">nullable</tspan></text>
+    <text x="10" y="175" class="field-text">birth_place <tspan class="field-type">string</tspan> <tspan class="field-note">nullable</tspan></text>
+    <text x="10" y="195" class="field-text">birth_date <tspan class="field-type">date</tspan> <tspan class="field-note">nullable</tspan></text>
+    <text x="10" y="215" class="field-text">death_date <tspan class="field-type">date</tspan> <tspan class="field-note">nullable</tspan></text>
+    <text x="10" y="235" class="field-text">profile_image <tspan class="field-type">string</tspan> <tspan class="field-note">nullable</tspan></text>
+    <text x="10" y="255" class="field-text">notable_works <tspan class="field-type">text</tspan> <tspan class="field-note">nullable</tspan></text>
+    <text x="10" y="275" class="field-text">biography <tspan class="field-type">text</tspan> <tspan class="field-note">nullable</tspan></text>
+    <text x="10" y="295" class="field-text">deleted_at <tspan class="field-type">timestamp</tspan> <tspan class="field-note">nullable, soft deletes</tspan></text>
+    <text x="10" y="315" class="field-text">created_at <tspan class="field-type">timestamp</tspan></text>
+    <text x="10" y="335" class="field-text">updated_at <tspan class="field-type">timestamp</tspan></text>
+  </g>
+  
+  <!-- BOOKS Entity -->
+  <g id="books-entity" transform="translate(500, 120)">
+    <rect class="entity-box" width="400" height="380"/>
+    <rect class="entity-header" width="400" height="50"/>
+    <text x="200" y="25" text-anchor="middle" class="entity-title">BOOKS</text>
+    <text x="200" y="42" text-anchor="middle" class="entity-subtitle">Ном</text>
+    
+    <text x="10" y="75" class="field-text"><tspan class="field-key">🔑 id</tspan> <tspan class="field-type">bigint</tspan> <tspan class="field-note">PK</tspan></text>
+    <text x="10" y="95" class="field-text"><tspan class="field-key">↗️ author_id</tspan> <tspan class="field-type">bigint</tspan> <tspan class="field-note">nullable, logical FK (not enforced)</tspan></text>
+    <text x="10" y="115" class="field-text"><tspan class="field-key">🔒 title</tspan> <tspan class="field-type">string</tspan> <tspan class="field-note">Номын гарчиг</tspan></text>
+    <text x="10" y="135" class="field-text">category <tspan class="field-type">string</tspan> <tspan class="field-note">nullable</tspan></text>
+    <text x="10" y="155" class="field-text">cover_image <tspan class="field-type">string</tspan> <tspan class="field-note">nullable</tspan></text>
+    <text x="10" y="175" class="field-text">published_date <tspan class="field-type">date</tspan> <tspan class="field-note">nullable</tspan></text>
+    <text x="10" y="195" class="field-text">price <tspan class="field-type">integer</tspan> <tspan class="field-note">default 0</tspan></text>
+    <text x="10" y="215" class="field-text">pages <tspan class="field-type">integer</tspan> <tspan class="field-note">nullable</tspan></text>
+    <text x="10" y="235" class="field-text">description <tspan class="field-type">longtext</tspan> <tspan class="field-note">nullable</tspan></text>
+    <text x="10" y="255" class="field-text">author <tspan class="field-type">string</tspan> <tspan class="field-note">nullable, snapshot</tspan></text>
+    <text x="10" y="275" class="field-text">created_at <tspan class="field-type">timestamp</tspan></text>
+    <text x="10" y="295" class="field-text">updated_at <tspan class="field-type">timestamp</tspan></text>
+  </g>
+  
+  <!-- USERS Entity -->
+  <g id="users-entity" transform="translate(970, 120)">
+    <rect class="entity-box" width="400" height="400"/>
+    <rect class="entity-header" width="400" height="50"/>
+    <text x="200" y="25" text-anchor="middle" class="entity-title">USERS</text>
+    <text x="200" y="42" text-anchor="middle" class="entity-subtitle">Хэрэглэгч</text>
+    
+    <text x="10" y="75" class="field-text"><tspan class="field-key">🔑 id</tspan> <tspan class="field-type">bigint</tspan> <tspan class="field-note">PK</tspan></text>
+    <text x="10" y="95" class="field-text"><tspan class="field-key">🔒 name</tspan> <tspan class="field-type">string</tspan> <tspan class="field-note">Хэрэглэгчийн нэр</tspan></text>
+    <text x="10" y="115" class="field-text"><tspan class="field-key">🔒 email</tspan> <tspan class="field-type">string</tspan> <tspan class="field-note">UNIQUE</tspan></text>
+    <text x="10" y="135" class="field-text">email_verified_at <tspan class="field-type">timestamp</tspan> <tspan class="field-note">nullable</tspan></text>
+    <text x="10" y="155" class="field-text">password <tspan class="field-type">string</tspan> <tspan class="field-note">nullable (social login)</tspan></text>
+    <text x="10" y="175" class="field-text">remember_token <tspan class="field-type">string</tspan> <tspan class="field-note">nullable</tspan></text>
+    <text x="10" y="195" class="field-text">role <tspan class="field-type">string</tspan> <tspan class="field-note">default 'user'</tspan></text>
+    <text x="10" y="215" class="field-text">provider <tspan class="field-type">string</tspan> <tspan class="field-note">nullable (social login)</tspan></text>
+    <text x="10" y="235" class="field-text">provider_id <tspan class="field-type">string</tspan> <tspan class="field-note">nullable (social login)</tspan></text>
+    <text x="10" y="255" class="field-text"><tspan class="field-key">↗️ last_read_book_id</tspan> <tspan class="field-type">bigint</tspan> <tspan class="field-note">nullable, FK to books.id</tspan></text>
+    <text x="10" y="275" class="field-text">last_read_at <tspan class="field-type">timestamp</tspan> <tspan class="field-note">nullable</tspan></text>
+    <text x="10" y="295" class="field-text">created_at <tspan class="field-type">timestamp</tspan></text>
+    <text x="10" y="315" class="field-text">updated_at <tspan class="field-type">timestamp</tspan></text>
+  </g>
+  
+  <!-- Relationship: authors to books -->
+  <path class="relationship-line" d="M 430,280 L 500,280" stroke-dasharray="5,5"/>
+  <text x="465" y="270" class="relationship-label">author_id</text>
+  <text x="445" y="300" class="relationship-label" style="font-size: 9px;">(logical, not enforced)</text>
+  <!-- Crow's foot notation: one to many -->
+  <circle cx="430" cy="280" r="3" fill="#666666"/>
+  <path d="M 500,275 L 490,280 L 500,285" stroke="#666666" stroke-width="2" fill="none"/>
+  <path d="M 495,275 L 485,280 L 495,285" stroke="#666666" stroke-width="2" fill="none"/>
+  
+  <!-- Relationship: users to books (last_read_book_id) -->
+  <path class="relationship-line" d="M 970,375 L 900,375" />
+  <text x="900" y="365" class="relationship-label">last_read_book_id</text>
+  <text x="875" y="395" class="relationship-label" style="font-size: 9px;">(FK enforced, ON DELETE SET NULL)</text>
+  <!-- Crow's foot notation: optional many to one -->
+  <circle cx="900" cy="375" r="3" fill="#666666"/>
+  <circle cx="970" cy="375" r="3" fill="none" stroke="#666666" stroke-width="2"/>
+  <path d="M 970,370 L 980,375 L 970,380" stroke="#666666" stroke-width="2" fill="none"/>
+  
+  <!-- Section: System Tables -->
+  <text x="50" y="590" class="section-title">System Tables</text>
+  
+  <!-- SETTINGS Entity -->
+  <g id="settings-entity" transform="translate(50, 610)">
+    <rect class="entity-box" width="300" height="140"/>
+    <rect class="entity-header" width="300" height="50"/>
+    <text x="150" y="25" text-anchor="middle" class="entity-title">SETTINGS</text>
+    <text x="150" y="42" text-anchor="middle" class="entity-subtitle">Тохиргоо</text>
+    
+    <text x="10" y="75" class="field-text"><tspan class="field-key">🔑 id</tspan> <tspan class="field-type">bigint</tspan> <tspan class="field-note">PK</tspan></text>
+    <text x="10" y="95" class="field-text">created_at <tspan class="field-type">timestamp</tspan></text>
+    <text x="10" y="115" class="field-text">updated_at <tspan class="field-type">timestamp</tspan></text>
+  </g>
+  
+  <!-- JOBS Entity -->
+  <g id="jobs-entity" transform="translate(400, 610)">
+    <rect class="entity-box" width="300" height="200"/>
+    <rect class="entity-header" width="300" height="50"/>
+    <text x="150" y="25" text-anchor="middle" class="entity-title">JOBS</text>
+    <text x="150" y="42" text-anchor="middle" class="entity-subtitle">Ажлын дараалал</text>
+    
+    <text x="10" y="75" class="field-text"><tspan class="field-key">🔑 id</tspan> <tspan class="field-type">bigint</tspan> <tspan class="field-note">PK</tspan></text>
+    <text x="10" y="95" class="field-text">queue <tspan class="field-type">string</tspan> <tspan class="field-note">indexed</tspan></text>
+    <text x="10" y="115" class="field-text">payload <tspan class="field-type">longtext</tspan></text>
+    <text x="10" y="135" class="field-text">attempts <tspan class="field-type">tinyint</tspan></text>
+    <text x="10" y="155" class="field-text">reserved_at <tspan class="field-type">integer</tspan> <tspan class="field-note">nullable</tspan></text>
+    <text x="10" y="175" class="field-text">available_at <tspan class="field-type">integer</tspan></text>
+  </g>
+  
+  <!-- JOB_BATCHES Entity -->
+  <g id="job-batches-entity" transform="translate(750, 610)">
+    <rect class="entity-box" width="320" height="260"/>
+    <rect class="entity-header" width="320" height="50"/>
+    <text x="160" y="25" text-anchor="middle" class="entity-title">JOB_BATCHES</text>
+    <text x="160" y="42" text-anchor="middle" class="entity-subtitle">Ажлын багц</text>
+    
+    <text x="10" y="75" class="field-text"><tspan class="field-key">🔑 id</tspan> <tspan class="field-type">string</tspan> <tspan class="field-note">PK</tspan></text>
+    <text x="10" y="95" class="field-text">name <tspan class="field-type">string</tspan></text>
+    <text x="10" y="115" class="field-text">total_jobs <tspan class="field-type">integer</tspan></text>
+    <text x="10" y="135" class="field-text">pending_jobs <tspan class="field-type">integer</tspan></text>
+    <text x="10" y="155" class="field-text">failed_jobs <tspan class="field-type">integer</tspan></text>
+    <text x="10" y="175" class="field-text">failed_job_ids <tspan class="field-type">longtext</tspan></text>
+    <text x="10" y="195" class="field-text">options <tspan class="field-type">mediumtext</tspan> <tspan class="field-note">nullable</tspan></text>
+    <text x="10" y="215" class="field-text">cancelled_at <tspan class="field-type">integer</tspan> <tspan class="field-note">nullable</tspan></text>
+    <text x="10" y="235" class="field-text">finished_at <tspan class="field-type">integer</tspan> <tspan class="field-note">nullable</tspan></text>
+  </g>
+  
+  <!-- FAILED_JOBS Entity -->
+  <g id="failed-jobs-entity" transform="translate(50, 900)">
+    <rect class="entity-box" width="340" height="220"/>
+    <rect class="entity-header" width="340" height="50"/>
+    <text x="170" y="25" text-anchor="middle" class="entity-title">FAILED_JOBS</text>
+    <text x="170" y="42" text-anchor="middle" class="entity-subtitle">Амжилтгүй ажил</text>
+    
+    <text x="10" y="75" class="field-text"><tspan class="field-key">🔑 id</tspan> <tspan class="field-type">bigint</tspan> <tspan class="field-note">PK</tspan></text>
+    <text x="10" y="95" class="field-text"><tspan class="field-key">🔒 uuid</tspan> <tspan class="field-type">string</tspan> <tspan class="field-note">UNIQUE</tspan></text>
+    <text x="10" y="115" class="field-text">connection <tspan class="field-type">text</tspan></text>
+    <text x="10" y="135" class="field-text">queue <tspan class="field-type">text</tspan></text>
+    <text x="10" y="155" class="field-text">payload <tspan class="field-type">longtext</tspan></text>
+    <text x="10" y="175" class="field-text">exception <tspan class="field-type">longtext</tspan></text>
+    <text x="10" y="195" class="field-text">failed_at <tspan class="field-type">timestamp</tspan></text>
+  </g>
+  
+  <!-- Legend -->
+  <g id="legend" transform="translate(50, 1200)">
+    <text x="0" y="0" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #2c3e50;">Legend:</text>
+    <text x="0" y="25" class="field-text"><tspan class="field-key">🔑</tspan> Primary Key</text>
+    <text x="0" y="45" class="field-text"><tspan class="field-key">🔒</tspan> Required / UNIQUE</text>
+    <text x="0" y="65" class="field-text"><tspan class="field-key">↗️</tspan> Foreign Key</text>
+    <text x="200" y="25" class="field-text">━━━━━ FK Enforced</text>
+    <text x="200" y="45" class="field-text">- - - - - Logical (not enforced)</text>
+    <text x="200" y="65" class="field-text">○──── Optional (nullable)</text>
+  </g>
+  
+  <!-- Notes -->
+  <g id="notes" transform="translate(50, 1350)">
+    <rect fill="#fff8dc" stroke="#daa520" stroke-width="1" width="1300" height="200" rx="5"/>
+    <text x="20" y="30" style="font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #2c3e50;">Notes:</text>
+    <text x="20" y="55" style="font-family: Arial, sans-serif; font-size: 12px; fill: #333333;">
+      1. <tspan font-weight="bold">authors ↔ books:</tspan> The books.author_id field references authors.id, but NO foreign key constraint exists in the database.
+    </text>
+    <text x="35" y="75" style="font-family: Arial, sans-serif; font-size: 12px; fill: #333333;">
+      This is a logical relationship only. The books.author field provides a snapshot of the author name for display.
+    </text>
+    <text x="20" y="105" style="font-family: Arial, sans-serif; font-size: 12px; fill: #333333;">
+      2. <tspan font-weight="bold">users ↔ books (last_read_book_id):</tspan> This is an actual foreign key constraint with ON DELETE SET NULL.
+    </text>
+    <text x="35" y="125" style="font-family: Arial, sans-serif; font-size: 12px; fill: #333333;">
+      When a book is deleted, users.last_read_book_id is automatically set to NULL.
+    </text>
+    <text x="20" y="155" style="font-family: Arial, sans-serif; font-size: 12px; fill: #333333;">
+      3. <tspan font-weight="bold">System tables:</tspan> jobs, job_batches, failed_jobs, and settings are standalone system tables with no
+    </text>
+    <text x="35" y="175" style="font-family: Arial, sans-serif; font-size: 12px; fill: #333333;">
+      relationships to application tables. They support Laravel's queue system and application settings.
+    </text>
+  </g>
+</svg>

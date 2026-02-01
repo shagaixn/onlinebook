@@ -21,6 +21,20 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
+## Architecture / ERD
+
+The OnlineBook application uses a well-structured database schema to manage books, authors, users, and system operations. 
+
+[![Database ERD](docs/erd/onlinebook-erd.svg)](docs/erd/onlinebook-erd.svg)
+
+For a detailed view of the database schema and relationships, see the [Database ERD Documentation](docs/erd/README.md).
+
+**Key entities:**
+- **Authors** (Зохиолч) - Author information with biographical details
+- **Books** (Ном) - Book catalog with metadata
+- **Users** (Хэрэглэгч) - User accounts with reading progress tracking
+- **System Tables** - Jobs, settings, and queue management
+
 ## Learning Laravel
 
 Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
