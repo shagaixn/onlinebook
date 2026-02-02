@@ -190,100 +190,39 @@
 @include('include.footer')
 
 <script>
-  const token = '{{ csrf_token() }}';
-  
-  // Global wishlist toggle function
-  async function toggleWishlist(bookId, button) {
-    if (button.disabled) return;
-    
-    button.disabled = true;
-    const svg = button.querySelector('svg');
-    
-    try {
-      const res = await fetch("{{ route('wishlist.toggle') }}", {
-        method: 'POST',
-        headers: {
-          'X-CSRF-TOKEN': token,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ book_id: bookId })
-      });
-      
-      if (!res.ok) throw new Error('Network error');
-      
-      const data = await res.json();
-      const active = data.in_wishlist === true;
-      
-      // Update button styles
-      button.classList.toggle('text-pink-500', active);
-      button.classList.toggle('text-slate-400', !active);
-      button.title = active ? 'Wishlist-аас хасах' : 'Wishlist-д нэмэх';
-      
-      // Update SVG fill
-      if (svg) {
-        svg.setAttribute('fill', active ? 'currentColor' : 'none');
-      }
-      
-      // Update text if exists (for detail page button)
-      const textSpan = button.querySelector('span');
-      if (textSpan) {
-        textSpan.textContent = active ? 'Хадгалсан' : 'Хадгалах';
-        button.classList.toggle('bg-pink-600', active);
-        button.classList.toggle('text-white', active);
-        button.classList.toggle('bg-white', !active);
-        button.classList.toggle('dark:bg-slate-800', !active);
-        button.classList.toggle('text-slate-700', !active);
-        button.classList.toggle('dark:text-slate-300', !active);
-        button.classList.toggle('border', !active);
-        button.classList.toggle('border-gray-300', !active);
-        button.classList.toggle('dark:border-slate-600', !active);
-      }
-      
-      // Update all buttons with same book ID on the page
-      document.querySelectorAll(`button[data-book-id="${bookId}"]`).forEach(btn => {
-        if (btn !== button) {
-          btn.classList.toggle('text-pink-500', active);
-          btn.classList.toggle('text-slate-400', !active);
-          const btnSvg = btn.querySelector('svg');
-          if (btnSvg) {
-            btnSvg.setAttribute('fill', active ? 'currentColor' : 'none');
-          }
-        }
-      });
-      
-      // Update header wishlist count if exists
-      const headerBadge = document.querySelector('a[href*="wishlist"] .bg-pink-500');
-      if (headerBadge) {
-        const currentCount = parseInt(headerBadge.textContent) || 0;
-        const newCount = active ? currentCount + 1 : Math.max(0, currentCount - 1);
-        headerBadge.textContent = newCount;
-        if (newCount === 0) {
-          headerBadge.classList.add('hidden');
-        } else {
-          headerBadge.classList.remove('hidden');
-        }
-      }
-      
-    } catch (e) {
-      console.error('Wishlist toggle failed:', e);
-      alert('Алдаа гарлаа. Дахин оролдоно уу.');
-    } finally {
-      button.disabled = false;
-    }
-  }
-  
-  // Old code for compatibility
   (function () {
+    const token = '{{ csrf_token() }}';
     document.querySelectorAll('.wishlist-btn').forEach(btn => {
-      if (!btn.hasAttribute('onclick')) {
-        btn.addEventListener('click', async (e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          const id = btn.getAttribute('data-book-id');
-          await toggleWishlist(id, btn);
-        });
-      }
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const id = btn.getAttribute('data-book-id');
+        btn.disabled = true;
+        try {
+          const res = await fetch("{{ route('wishlist.toggle') }}", {
+            method: 'POST',
+            headers: {
+              'X-CSRF-TOKEN': token,
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ book_id: id })
+          });
+          const data = await res.json();
+          const active = data.in_wishlist === true;
+          btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+          btn.classList.toggle('bg-pink-600', active);
+          btn.classList.toggle('text-white', active);
+          btn.classList.toggle('shadow', active);
+          btn.classList.toggle('bg-white/10', !active);
+          btn.classList.toggle('text-pink-300', !active);
+          const svg = btn.querySelector('svg');
+          svg?.setAttribute('fill', active ? 'currentColor' : 'none');
+        } catch (e) {
+          console.error('Wishlist toggle failed', e);
+        } finally {
+          btn.disabled = false;
+        }
+      });
     });
   })();
 </script>

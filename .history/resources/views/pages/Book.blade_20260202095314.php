@@ -240,29 +240,11 @@
         button.classList.toggle('dark:border-slate-600', !active);
       }
       
-      // Update all buttons with same book ID on the page
-      document.querySelectorAll(`button[data-book-id="${bookId}"]`).forEach(btn => {
-        if (btn !== button) {
-          btn.classList.toggle('text-pink-500', active);
-          btn.classList.toggle('text-slate-400', !active);
-          const btnSvg = btn.querySelector('svg');
-          if (btnSvg) {
-            btnSvg.setAttribute('fill', active ? 'currentColor' : 'none');
-          }
-        }
-      });
-      
       // Update header wishlist count if exists
-      const headerBadge = document.querySelector('a[href*="wishlist"] .bg-pink-500');
-      if (headerBadge) {
-        const currentCount = parseInt(headerBadge.textContent) || 0;
-        const newCount = active ? currentCount + 1 : Math.max(0, currentCount - 1);
-        headerBadge.textContent = newCount;
-        if (newCount === 0) {
-          headerBadge.classList.add('hidden');
-        } else {
-          headerBadge.classList.remove('hidden');
-        }
+      const headerCount = document.querySelector('.wishlist-count');
+      if (headerCount) {
+        const currentCount = parseInt(headerCount.textContent) || 0;
+        headerCount.textContent = active ? currentCount + 1 : Math.max(0, currentCount - 1);
       }
       
     } catch (e) {

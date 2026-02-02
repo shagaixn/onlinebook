@@ -78,6 +78,25 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Subscription Status -->
+                    <div class="bg-gradient-to-br from-indigo-900/50 to-purple-900/50 backdrop-blur-xl border border-indigo-500/30 rounded-2xl p-6 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-indigo-500/20 rounded-full blur-2xl"></div>
+                        
+                        <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+                            Book Plus Эрх
+                        </h3>
+                        
+                        <div class="mb-4">
+                            <div class="text-sm text-indigo-200 mb-1">Төлөв</div>
+                            <div class="text-xl font-bold text-white">Идэвхгүй</div>
+                        </div>
+                        
+                        <button class="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-medium transition-colors shadow-lg shadow-indigo-900/20">
+                            Эрх авах
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Right Column: Details & Activity -->
@@ -130,7 +149,7 @@
                     </div>
 
                     <!-- Wishlist Section -->
-                    <div id="wishlist" class="bg-dark dark:bg-slate-800/50 backdrop-blur-xl border border-gray-200 dark:border-slate-700 rounded-2xl p-6 scroll-mt-24">
+                    <div class="bg-dark dark:bg-slate-800/50 backdrop-blur-xl border border-gray-200 dark:border-slate-700 rounded-2xl p-6">
                         <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2 border-b border-gray-200 dark:border-slate-700 pb-4">
                             <svg class="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>

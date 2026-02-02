@@ -40,29 +40,10 @@
       </div>
       <div class="mt-2 flex flex-wrap gap-3">
         <a href="{{ route('books.read', $book->id) }}" aria-label="Унших"
-           class="text-gray-700 dark:text-gray-300 px-8 py-3 rounded-full shadow-md bg-blue-600 text-white hover:bg-blue-700 transition font-semibold text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+           class="mb-4 text-gray-700 dark:text-gray-300 px-8 py-3 rounded-full shadow-md hover:from-blue-600 hover:to-indigo-700 transition font-semibold text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ">
           Унших
         </a>
 
-        @auth
-          <button onclick="toggleWishlist({{ $book->id }}, this)" 
-                  class="wishlist-btn px-6 py-3 rounded-full shadow-md transition-all font-semibold text-lg focus:outline-none focus:ring-2 focus:ring-pink-500 flex items-center gap-2 {{ $inWishlist ? 'bg-pink-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-gray-300 dark:border-slate-600' }}"
-                  data-book-id="{{ $book->id }}"
-                  title="{{ $inWishlist ? 'Wishlist-аас хасах' : 'Wishlist-д нэмэх' }}">
-            <svg class="w-5 h-5" fill="{{ $inWishlist ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-            </svg>
-            <span>{{ $inWishlist ? 'Хадгалсан' : 'Хадгалах' }}</span>
-          </button>
-        @else
-          <a href="{{ route('login') }}" 
-             class="px-6 py-3 rounded-full shadow-md transition-all font-semibold text-lg bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-gray-300 dark:border-slate-600 hover:border-pink-500 dark:hover:border-pink-500 flex items-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-            </svg>
-            <span>Хадгалах</span>
-          </a>
-        @endauth
       
     </div>
   </div>
@@ -71,7 +52,7 @@
   {{-- Reviews Section --}}
   <div class="max-w-4xl mx-auto mt-8 px-6">
     {{-- Average Rating Display --}}
-    <div class="bg-dark dark:bg-white/5 backdrop-blur border border-gray-200 dark:border-white/10 rounded-2xl p-6 mb-6 transition-colors duration-300">
+    <div class="bg-white dark:bg-white/5 backdrop-blur border border-gray-200 dark:border-white/10 rounded-2xl p-6 mb-6 transition-colors duration-300">
       <div class="flex items-center justify-between mb-6">
         <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Үнэлгээ & Сэтгэгдэл</h3>
         @if($book->reviews->count() > 0)
@@ -82,49 +63,12 @@
           </div>
           <p class="text-sm text-gray-600 dark:text-gray-400">{{ $book->reviews->count() }} үнэлгээ</p>
         </div>
-        @else
-        <div class="text-center">
-          <div class="flex items-center gap-2">
-            <span class="text-3xl font-bold text-gray-400">0.0</span>
-            <div class="text-gray-400 text-2xl">★</div>
-          </div>
-          <p class="text-sm text-gray-600 dark:text-gray-400">Үнэлгээ байхгүй</p>
-        </div>
         @endif
       </div>
 
-      {{-- Rating Distribution --}}
-      @if($book->reviews->count() > 0)
-      <div class="mb-6 p-4 bg-dark dark:bg-white/5 rounded-xl">
-        <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">Үнэлгээний задаргаа</h4>
-        @php
-          $totalReviews = $book->reviews->count();
-          $ratingCounts = $book->reviews->groupBy('rating')->map->count();
-        @endphp
-        @for($star = 5; $star >= 1; $star--)
-          @php
-            $count = $ratingCounts->get($star, 0);
-            $percentage = $totalReviews > 0 ? ($count / $totalReviews) * 100 : 0;
-          @endphp
-          <div class="flex items-center gap-3 mb-2">
-            <div class="flex items-center gap-1 w-12">
-              <span class="text-sm text-gray-700 dark:text-gray-300">{{ $star }}</span>
-              <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-              </svg>
-            </div>
-            <div class="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-              <div class="bg-yellow-400 h-2 rounded-full transition-all duration-300" style="width: {{ $percentage }}%"></div>
-            </div>
-            <span class="text-sm text-gray-600 dark:text-gray-400 w-12 text-right">{{ $count }}</span>
-          </div>
-        @endfor
-      </div>
-      @endif
-
       {{-- Review Form (Only for logged-in users) --}}
       @auth
-        <div class="mb-8 p-6 bg-dark-50 dark:bg-white/5 rounded-xl border border-gray-200 dark:border-white/10">
+        <div class="mb-8 p-6 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-200 dark:border-white/10">
           <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             @if($userReview)
               Таны үнэлгээг засах
@@ -172,7 +116,7 @@
             {{-- Comment --}}
             <div class="mb-4">
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Сэтгэгдэл (заавал биш)</label>
-              <textarea name="comment" rows="4" class="w-full px-4 py-2 border border-gray-300 dark:border-white/20 rounded-lg bg-dark dark:bg-white/5 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" placeholder="Энэ номын талаархи таны бодол...">{{ old('comment', $userReview->comment ?? '') }}</textarea>
+              <textarea name="comment" rows="4" class="w-full px-4 py-2 border border-gray-300 dark:border-white/20 rounded-lg bg-white dark:bg-white/5 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" placeholder="Энэ номын талаархи таны бодол...">{{ old('comment', $userReview->comment ?? '') }}</textarea>
             </div>
 
             <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
@@ -198,7 +142,7 @@
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Бүх үнэлгээ</h4>
         
         @forelse($book->reviews()->latest()->get() as $review)
-          <div class="p-4 bg-dark-50 dark:bg-white/5 rounded-xl border border-gray-200 dark:border-white/10">
+          <div class="p-4 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-200 dark:border-white/10">
             <div class="flex items-start justify-between mb-2">
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold">
@@ -292,73 +236,40 @@
     }
   });
 
-  // Wishlist toggle function
-  const token = '{{ csrf_token() }}';
-  
-  async function toggleWishlist(bookId, button) {
-    if (button.disabled) return;
-    
-    button.disabled = true;
-    const svg = button.querySelector('svg');
-    const textSpan = button.querySelector('span');
-    
-    try {
-      const res = await fetch("{{ route('wishlist.toggle') }}", {
-        method: 'POST',
-        headers: {
-          'X-CSRF-TOKEN': token,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ book_id: bookId })
-      });
-      
-      if (!res.ok) throw new Error('Network error');
-      
-      const data = await res.json();
-      const active = data.in_wishlist === true;
-      
-      // Update button styles
-      button.classList.toggle('bg-pink-600', active);
-      button.classList.toggle('text-white', active);
-      button.classList.toggle('bg-white', !active);
-      button.classList.toggle('dark:bg-slate-800', !active);
-      button.classList.toggle('text-slate-700', !active);
-      button.classList.toggle('dark:text-slate-300', !active);
-      button.classList.toggle('border', !active);
-      button.classList.toggle('border-gray-300', !active);
-      button.classList.toggle('dark:border-slate-600', !active);
-      
-      // Update SVG fill
-      if (svg) {
+  // Wishlist functionality (existing)
+  (function () {
+    const token = '{{ csrf_token() }}';
+    const btn = document.querySelector('.wishlist-btn');
+    if (!btn) return;
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      const id = btn.getAttribute('data-book-id');
+      try {
+        const res = await fetch("{{ route('wishlist.toggle') }}", {
+          method: 'POST',
+          headers: {
+            'X-CSRF-TOKEN': token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ book_id: id })
+        });
+        const data = await res.json();
+        const active = data.in_wishlist === true;
+        btn.setAttribute('aria-pressed', active ? 'true':'false');
+        btn.querySelector('span').textContent = active ? 'Wishlist-д байна' : 'Wishlist';
+        btn.classList.toggle('bg-pink-600', active);
+        btn.classList.toggle('text-white', active);
+        btn.classList.toggle('shadow-md', active);
+        btn.classList.toggle('bg-pink-100', !active);
+        btn.classList.toggle('text-pink-700', !active);
+        const svg = btn.querySelector('svg');
         svg.setAttribute('fill', active ? 'currentColor' : 'none');
+      } catch (e) {
+        console.error('Wishlist toggle error', e);
+      } finally {
+        btn.disabled = false;
       }
-      
-      // Update text
-      if (textSpan) {
-        textSpan.textContent = active ? 'Хадгалсан' : 'Хадгалах';
-      }
-      
-      button.title = active ? 'Wishlist-аас хасах' : 'Wishlist-д нэмэх';
-      
-      // Update header wishlist count badge
-      const headerBadge = document.querySelector('a[href*="wishlist"] .bg-pink-500');
-      if (headerBadge) {
-        const currentCount = parseInt(headerBadge.textContent) || 0;
-        const newCount = active ? currentCount + 1 : Math.max(0, currentCount - 1);
-        headerBadge.textContent = newCount;
-        if (newCount === 0) {
-          headerBadge.classList.add('hidden');
-        } else {
-          headerBadge.classList.remove('hidden');
-        }
-      }
-      
-    } catch (e) {
-      console.error('Wishlist toggle error:', e);
-      alert('Алдаа гарлаа. Дахин оролдоно уу.');
-    } finally {
-      button.disabled = false;
-    }
-  }
+    });
+  })();
 </script>

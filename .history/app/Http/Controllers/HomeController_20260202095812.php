@@ -7,7 +7,6 @@ use App\Models\Book;
 use App\Models\Author;
 use App\Models\BookCategory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {

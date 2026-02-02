@@ -124,7 +124,7 @@
 
       {{-- Review Form (Only for logged-in users) --}}
       @auth
-        <div class="mb-8 p-6 bg-dark-50 dark:bg-white/5 rounded-xl border border-gray-200 dark:border-white/10">
+        <div class="mb-8 p-6 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-200 dark:border-white/10">
           <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             @if($userReview)
               Таны үнэлгээг засах
@@ -172,7 +172,7 @@
             {{-- Comment --}}
             <div class="mb-4">
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Сэтгэгдэл (заавал биш)</label>
-              <textarea name="comment" rows="4" class="w-full px-4 py-2 border border-gray-300 dark:border-white/20 rounded-lg bg-dark dark:bg-white/5 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" placeholder="Энэ номын талаархи таны бодол...">{{ old('comment', $userReview->comment ?? '') }}</textarea>
+              <textarea name="comment" rows="4" class="w-full px-4 py-2 border border-gray-300 dark:border-white/20 rounded-lg bg-white dark:bg-white/5 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" placeholder="Энэ номын талаархи таны бодол...">{{ old('comment', $userReview->comment ?? '') }}</textarea>
             </div>
 
             <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
@@ -198,7 +198,7 @@
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Бүх үнэлгээ</h4>
         
         @forelse($book->reviews()->latest()->get() as $review)
-          <div class="p-4 bg-dark-50 dark:bg-white/5 rounded-xl border border-gray-200 dark:border-white/10">
+          <div class="p-4 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-200 dark:border-white/10">
             <div class="flex items-start justify-between mb-2">
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold">

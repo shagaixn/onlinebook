@@ -7,7 +7,6 @@ use App\Models\Book;
 use App\Models\Author;
 use App\Models\BookCategory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -71,12 +70,6 @@ class HomeController extends Controller
         // Authors for filter dropdown
         $authors = \App\Models\Author::orderBy('name')->get(['id','name']);
 
-        // Get wishlist IDs for logged-in users
-        $wishlistIds = [];
-        if (Auth::check()) {
-            $wishlistIds = Auth::user()->wishlistBooks()->pluck('book_id')->toArray();
-        }
-
         // When no filter is applied, group books by categories
         $categoryRows = collect();
         if (!$categoryId && $categoryName === '' && $q === '' && !$authorId) {
@@ -99,7 +92,7 @@ class HomeController extends Controller
             });
         }
 
-        return view('pages.Book', compact('books', 'categories', 'categoryId', 'categoryName', 'categoryRows', 'authors', 'authorId', 'wishlistIds'));
+        return view('pages.Book', compact('books', 'categories', 'categoryId', 'categoryName', 'categoryRows', 'authors', 'authorId'));
     }
     public function home()
     {

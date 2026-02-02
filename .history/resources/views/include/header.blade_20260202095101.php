@@ -239,18 +239,6 @@
               </div>
 
               @auth
-                <a href="{{ url('/profile#wishlist') }}" class="inline-flex items-center gap-2 rounded-2xl border border-pink-200 dark:border-pink-800 px-4 py-3 text-pink-600 hover:text-pink-700 dark:text-pink-400 dark:hover:text-pink-300 transition-colors relative">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                  </svg>
-                  <span class="font-semibold">Хадгалсан</span>
-                  @if(auth()->user()->wishlistBooks()->count() > 0)
-                  <span class="bg-pink-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                    {{ auth()->user()->wishlistBooks()->count() }}
-                  </span>
-                  @endif
-                </a>
-                
                 <a href="{{ url('/profile') }}" class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 dark:border-slate-800 px-4 py-3 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors">
                   <span class="font-semibold">{{ auth()->user()->name ?? 'Профайл' }}</span>
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>

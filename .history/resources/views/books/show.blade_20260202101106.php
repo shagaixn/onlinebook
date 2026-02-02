@@ -198,7 +198,7 @@
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Бүх үнэлгээ</h4>
         
         @forelse($book->reviews()->latest()->get() as $review)
-          <div class="p-4 bg-dark-50 dark:bg-white/5 rounded-xl border border-gray-200 dark:border-white/10">
+          <div class="p-4 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-200 dark:border-white/10">
             <div class="flex items-start justify-between mb-2">
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold">

@@ -7,7 +7,6 @@ use App\Models\Book;
 use App\Models\Author;
 use App\Models\BookCategory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -71,12 +70,6 @@ class HomeController extends Controller
         // Authors for filter dropdown
         $authors = \App\Models\Author::orderBy('name')->get(['id','name']);
 
-        // Get wishlist IDs for logged-in users
-        $wishlistIds = [];
-        if (Auth::check()) {
-            $wishlistIds = Auth::user()->wishlistBooks()->pluck('book_id')->toArray();
-        }
-
         // When no filter is applied, group books by categories
         $categoryRows = collect();
         if (!$categoryId && $categoryName === '' && $q === '' && !$authorId) {
@@ -99,7 +92,7 @@ class HomeController extends Controller
             });
         }
 
-        return view('pages.Book', compact('books', 'categories', 'categoryId', 'categoryName', 'categoryRows', 'authors', 'authorId', 'wishlistIds'));
+        return view('pages.Book', compact('books', 'categories', 'categoryId', 'categoryName', 'categoryRows', 'authors', 'authorId'));
     }
     public function home()
     {
@@ -113,12 +106,11 @@ class HomeController extends Controller
         }
 
         // 2. New Books
-        $newBooks = Book::with('reviews')->latest()->take(6)->get();
+        $newBooks = Book::latest()->take(6)->get();
 
         // 3. Top Rated Books (using the new reviews relation)
         // We need to load reviews count and avg rating
-        $topRatedBooks = Book::with('reviews')
-            ->withCount('reviews')
+        $topRatedBooks = Book::withCount('reviews')
             ->withAvg('reviews', 'rating')
             ->orderByDesc('reviews_avg_rating')
             ->having('reviews_count', '>', 0) // Only books with reviews
@@ -127,7 +119,7 @@ class HomeController extends Controller
         
         // If not enough rated books, fill with random or latest
         if ($topRatedBooks->count() < 3) {
-            $topRatedBooks = Book::with('reviews')->inRandomOrder()->take(6)->get();
+            $topRatedBooks = Book::inRandomOrder()->take(6)->get();
         }
 
         // 4. Categories - temporarily without count until pivot table is working
