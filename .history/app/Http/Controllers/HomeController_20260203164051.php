@@ -1,0 +1,275 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Home;
+use App\Models\Book;
+use App\Models\Author;
+use App\Models\BookCategory;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class HomeController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        // resources/views/pages/HomePage.blade.php-ийг дуудаж байна
+        return view('pages.HomePage');
+    }
+    public function book(Request $request)
+    {
+        $q = trim((string) $request->get('q', ''));
+        $categoryId = $request->integer('category_id');
+        $categoryName = trim((string) $request->get('category', ''));
+        $authorId = $request->integer('author_id');
+
+        // Eager load relationships for author_display to work
+        $query = Book::with(['authorModel', 'categories', 'categoryModel', 'reviews']);
+
+        // Enhanced search: title, description, author name
+        if ($q !== '') {
+            $query->where(function($subQuery) use ($q) {
+                $subQuery->where('title', 'like', "%{$q}%")
+                        ->orWhere('description', 'like', "%{$q}%")
+                        ->orWhere('author', 'like', "%{$q}%")
+                        ->orWhereHas('authorModel', function($authorQuery) use ($q) {
+                            $authorQuery->where('name', 'like', "%{$q}%");
+                        });
+            });
+        }
+
+        // Filter by category (supports both single and many-to-many)
+        if ($categoryId) {
+            $query->where(function($catQuery) use ($categoryId) {
+                $catQuery->where('category_id', $categoryId)
+                        ->orWhereHas('categories', function($manyQuery) use ($categoryId) {
+                            $manyQuery->where('book_categories.id', $categoryId);
+                        });
+            });
+        } elseif ($categoryName !== '') {
+            $query->where(function($catQuery) use ($categoryName) {
+                $catQuery->where('category', $categoryName)
+                        ->orWhereHas('categories', function($manyQuery) use ($categoryName) {
+                            $manyQuery->where('book_categories.name', $categoryName);
+                        });
+            });
+        }
+
+        // Filter by author
+        if ($authorId) {
+            $query->where('author_id', $authorId);
+        }
+
+        $books = $query->orderByDesc('created_at')->get();
+
+        // Categories for dropdown
+        $categories = BookCategory::orderBy('name')->get(['id','name']);
+        
+        // Authors for filter dropdown
+        $authors = \App\Models\Author::orderBy('name')->get(['id','name']);
+
+        // Get wishlist IDs for logged-in users
+        $wishlistIds = [];
+        if (Auth::check()) {
+            $wishlistIds = Auth::user()->wishlistBooks()->pluck('book_id')->toArray();
+        }
+
+        // When no filter is applied, group books by categories
+        $categoryRows = collect();
+        if (!$categoryId && $categoryName === '' && $q === '' && !$authorId) {
+            // Get all categories that have books
+            $cats = BookCategory::orderBy('name')->get();
+            
+            $categoryRows = $cats->map(function ($cat) {
+                $books = $cat->books()->with(['authorModel', 'reviews'])->latest()->get();
+                if ($books->isEmpty()) {
+                    // Try single category relationship as fallback
+                    $books = $cat->booksWithSingleCategory()->with(['authorModel'])->latest()->get();
+                }
+                
+                return [
+                    'category' => $cat,
+                    'books' => $books->take(10), // Limit to 10 per category
+                ];
+            })->filter(function($row) {
+                return $row['books']->isNotEmpty(); // Only show categories with books
+            });
+        }
+
+        return view('pages.Book', compact('books', 'categories', 'categoryId', 'categoryName', 'categoryRows', 'authors', 'authorId', 'wishlistIds'));
+    }
+    public function home()
+    {
+        // 1. Continue Reading (if logged in)
+        $continueReading = null;
+        if (\Illuminate\Support\Facades\Auth::check()) {
+            $continueReading = \App\Models\ReadingProgress::with('book')
+                ->where('user_id', \Illuminate\Support\Facades\Auth::id())
+                ->orderBy('updated_at', 'desc')
+                ->first();
+        }
+
+        // 2. New Books
+        $newBooks = Book::with('reviews')->latest()->take(6)->get();
+
+        // 3. Top Rated Books (using the new reviews relation)
+        // We need to load reviews count and avg rating
+        $topRatedBooks = Book::with('reviews')
+            ->withCount('reviews')
+            ->withAvg('reviews', 'rating')
+            ->orderByDesc('reviews_avg_rating')
+            ->having('reviews_count', '>', 0) // Only books with reviews
+            ->take(6)
+            ->get();
+        
+        // If not enough rated books, fill with random or latest
+        if ($topRatedBooks->count() < 3) {
+            $topRatedBooks = Book::with('reviews')->inRandomOrder()->take(6)->get();
+        }
+
+        // 4. Categories - temporarily without count until pivot table is working
+        $categories = BookCategory::orderBy('name')->take(8)->get();
+
+        // 5. Featured Authors
+        $featuredAuthors = Author::withCount('books')->orderByDesc('books_count')->take(5)->get();
+
+        // 6. Featured Books (selected by admin)
+        $featuredBooks = Book::where('is_featured', true)->latest()->take(10)->get();
+
+        // Wishlist IDs for UI state & Wishlist Books
+        $wishlistIds = [];
+        $wishlistBooks = collect();
+        
+        if (\Illuminate\Support\Facades\Auth::check()) {
+            $user = \Illuminate\Support\Facades\Auth::user();
+            $wishlistIds = $user->wishlistBooks()->pluck('book_id')->toArray();
+            $wishlistBooks = $user->wishlistBooks()->latest()->get();
+        } else {
+            $wishlistIds = session('wishlist.ids', []);
+            if (!empty($wishlistIds)) {
+                $wishlistBooks = Book::whereIn('id', $wishlistIds)->get();
+            }
+        }
+
+        return view('HomePage', compact(
+            'continueReading',
+            'newBooks',
+            'topRatedBooks',
+            'categories',
+            'featuredAuthors',
+            'featuredBooks',
+            'wishlistIds',
+            'wishlistBooks'
+        ));
+    }
+
+    public function service()
+    {
+    return view('pages.service');
+    }
+
+    public function about()
+    {
+        return view('pages.about');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function authors(Request $request)
+    {
+        $query = Author::withCount('books');
+
+        // Search filter
+        if ($search = $request->get('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('nationality', 'like', "%{$search}%")
+                  ->orWhere('biography', 'like', "%{$search}%");
+            });
+        }
+
+        // Nationality filter
+        if ($nationality = $request->get('nationality')) {
+            $query->where('nationality', $nationality);
+        }
+
+        // Living status filter
+        if ($status = $request->get('status')) {
+            if ($status === 'alive') {
+                $query->where(function($q) {
+                    $q->whereNull('death_date')
+                      ->orWhere('death_date', '')
+                      ->orWhere('death_date', 'Одоо');
+                });
+            } else {
+                $query->whereNotNull('death_date')
+                      ->where('death_date', '!=', '')
+                      ->where('death_date', '!=', 'Одоо');
+            }
+        }
+
+        // Sorting
+        $sort = $request->get('sort', 'name');
+        switch($sort) {
+            case 'name_desc':
+                $query->orderBy('name', 'desc');
+                break;
+            case 'books_count':
+                $query->orderBy('books_count', 'desc');
+                break;
+            case 'birth_date':
+                $query->orderBy('birth_date', 'asc');
+                break;
+            default:
+                $query->orderBy('name', 'asc');
+        }
+
+        $authors = $query->paginate(12)->withQueryString();
+
+        return view('authors.index', compact('authors'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Home $home)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Home $home)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Home $home)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Home $home)
+    {
+        //
+    }
+}
