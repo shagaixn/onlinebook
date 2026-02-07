@@ -93,6 +93,9 @@
         if(next < 0 || next >= total) return;
         index = next;
         update();
+
+        clearTimeout(saveTimeout);
+        saveTimeout = setTimeout(() => saveProgress(index), 1000);
     }
     prevBtn && prevBtn.addEventListener('click', ()=>go(-1));
     nextBtn && nextBtn.addEventListener('click', ()=>go(1));

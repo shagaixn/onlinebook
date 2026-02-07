@@ -64,14 +64,43 @@
     const nextBtn = document.getElementById('sliderNext');
     const bar = document.getElementById('sliderProgressBar');
     
-    let index = 0;
+    let index = {{ $progress ? $progress->current_page - 1 : 0 }};
     const total = slides.length;
+    
+    // Ensure index is within bounds
+    if (index < 0) index = 0;
+    if (index >= total) index = total - 1;
 
     if(total <= 1){
         if(prevBtn) prevBtn.style.display='none';
         if(nextBtn) nextBtn.style.display='none';
         if(bar) bar.style.width='100%';
         return;
+    }
+
+    let saveTimeout;
+    async function saveProgress(idx) {
+        @auth
+        console.log('Saving progress...', {page: idx + 1, percentage: ((idx + 1) / total) * 100});
+        try {
+            const pct = ((idx + 1) / total) * 100;
+            const response = await fetch("{{ route('books.progress', $book->id) }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    current_page: idx + 1,
+                    percentage: pct
+                })
+            });
+            const data = await response.json();
+            console.log('Progress saved successfully:', data);
+        } catch (e) {
+            console.error('Failed to save progress', e);
+        }
+        @endauth
     }
 
     function update(){
@@ -93,6 +122,9 @@
         if(next < 0 || next >= total) return;
         index = next;
         update();
+
+        clearTimeout(saveTimeout);
+        saveTimeout = setTimeout(() => saveProgress(index), 1000);
     }
     prevBtn && prevBtn.addEventListener('click', ()=>go(-1));
     nextBtn && nextBtn.addEventListener('click', ()=>go(1));

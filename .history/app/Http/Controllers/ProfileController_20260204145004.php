@@ -11,9 +11,16 @@ class ProfileController extends Controller
     public function show()
     {
         $user = Auth::user();
-        $wishlistBooks = $user->wishlistBooks()->get();
+        $wishlistBooks = $user->wishlistBooks()->with('reviews')->get();
+        $reviewsCount = \App\Models\Review::where('user_id', $user->id)->count();
         
-        return view('include.profile', compact('wishlistBooks'));
+        // Get reading history - books user has started reading
+        $readingHistory = \App\Models\ReadingProgress::where('user_id', $user->id)
+            ->with(['book.reviews', 'book.categories'])
+            ->orderBy('updated_at', 'desc')
+            ->get();
+        
+        return view('include.profile', compact('wishlistBooks', 'reviewsCount', 'readingHistory'));
     }
 
     public function edit()

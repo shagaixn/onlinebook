@@ -72,10 +72,4 @@ class Book extends Model
         return $this->belongsToMany(\App\Models\BookCategory::class, 'book_book_category', 'book_id', 'book_category_id')
                     ->withTimestamps();
     }
-
-    // Reviews relationship
-    public function reviews()
-    {
-        return $this->hasMany(\App\Models\Review::class);
-    }
 }

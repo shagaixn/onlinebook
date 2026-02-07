@@ -97,8 +97,6 @@
 <div class="max-w-7xl mx-auto px-6 py-10">
     <div class="text-center mb-10">
         <h1 class="text-4xl font-bold mb-3 text-slate-900 dark:text-slate-100"> Зохиолчид</h1>
-        <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"> </p>
-    </div>
 
     @if($authors->count() === 0)
         <div class="p-12 text-center bg-white dark:bg-dark rounded-2xl border border-gray-100 dark:border-slate-800">

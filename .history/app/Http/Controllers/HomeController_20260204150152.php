@@ -145,6 +145,7 @@ class HomeController extends Controller
         }
 
         return view('HomePage', compact(
+            'continueReading',
             'newBooks',
             'topRatedBooks',
             'categories',

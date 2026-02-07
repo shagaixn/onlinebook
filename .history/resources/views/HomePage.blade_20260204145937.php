@@ -276,10 +276,7 @@
                   alt="{{ $book->title }}"
                   class="w-full h-full object-cover transition duration-500 group-hover:scale-110"
                   loading="lazy">
-                <div class="absolute top-2 right-2 bg-black/60 backdrop-blur px-2 py-1 rounded-lg flex items-center gap-1">
-                  <span class="text-yellow-400 text-xs" aria-hidden="true">★</span>
-                  <span class="text-white text-xs font-bold">{{ number_format($book->reviews_avg_rating ?? 0, 1) }}</span>
-                </div>
+
               </div>
               <h3 class="text-slate-900 dark:text-white font-semibold truncate group-hover:text-cyan-600 dark:group-hover:text-cyan-300 transition">{{ $book->title }}</h3>
               <p class="text-slate-500 dark:text-slate-400 text-sm truncate">{{ $book->author ?? $book->authorModel?->name ?? 'Unknown' }}</p>
@@ -332,11 +329,7 @@
               {{ $book->author ?? $book->authorModel?->name ?? 'Unknown' }}
             </p>
             
-            <div class="flex items-center justify-between">
-              <span class="text-gray-900 dark:text-white font-medium text-sm">
-                {{ $book->reviews->count() }} үнэлгээ
-              </span>
-            </div>
+
           </a>
         </div>
       @empty

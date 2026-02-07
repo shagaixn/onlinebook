@@ -13,13 +13,52 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Models\ReadingProgress;
 
 class BookController extends Controller
 {
     public function read($id)
     {
         $book = Book::with(['authorModel', 'categoryModel'])->findOrFail($id);
-        return view('books.read', compact('book'));
+        $progress = null;
+        if (Auth::check()) {
+            $progress = ReadingProgress::where('user_id', Auth::id())
+                ->where('book_id', $id)
+                ->first();
+        }
+        return view('books.read', compact('book', 'progress'));
+    }
+
+    public function saveProgress(Request $request, $id)
+    {
+        \Log::info('SaveProgress called', ['user_id' => Auth::id(), 'book_id' => $id, 'data' => $request->all()]);
+        
+        if (!Auth::check()) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        $request->validate([
+            'current_page' => 'required|integer',
+            'percentage' => 'nullable|numeric',
+        ]);
+
+        $progress = ReadingProgress::updateOrCreate(
+            ['user_id' => Auth::id(), 'book_id' => $id],
+            [
+                'current_page' => $request->current_page,
+                'percentage' => $request->percentage ?? 0,
+            ]
+        );
+        
+        \Log::info('Progress saved', ['progress_id' => $progress->id]);
+
+        // Record last-read book and timestamp on the user profile
+        $user = Auth::user();
+        $user->last_read_book_id = $id;
+        $user->last_read_at = now();
+        $user->save();
+
+        return response()->json(['message' => 'Progress saved', 'progress' => $progress]);
     }
 
     public function index(Request $request)

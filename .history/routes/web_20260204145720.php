@@ -10,7 +10,6 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AuthorController;
-use App\Http\Controllers\ReviewController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -58,10 +57,8 @@ Route::middleware(['auth'])->group(function () {
     })->name('profile.changePasswordForm');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.changePassword');
-    
-    // Review routes
-    Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
-    Route::delete('/reviews/{id}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
+    // Reading Progress
+    Route::post('/books/{id}/progress', [\App\Http\Controllers\BookController::class, 'saveProgress'])->name('books.progress');
 });
 
 // Auth routes

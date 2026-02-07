@@ -29,7 +29,6 @@ class User extends Authenticatable
         'interests',
         'provider',
         'provider_id',
-        'last_read_book_id',
     ];
 
     /**
@@ -53,7 +52,6 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'is_author' => 'boolean',
             'age' => 'integer',
-            'last_read_at' => 'datetime',
         ];
     }
 
@@ -75,10 +73,5 @@ class User extends Authenticatable
     public function wishlistBooks()
     {
         return $this->belongsToMany(Book::class, 'wishlists', 'user_id', 'book_id')->withTimestamps();
-    }
-
-    public function lastReadBook()
-    {
-        return $this->belongsTo(Book::class, 'last_read_book_id');
     }
 }
